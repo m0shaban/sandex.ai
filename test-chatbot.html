@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandex AI Chatbot Test</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.unified.css">    <style>
+        :root {
+            /* Chatbot Color Variables */
+            --chatbot-primary: #EF571B;
+            --chatbot-secondary: #F3C846;
+            --chatbot-primary-light: #ff7135;
+            --chatbot-secondary-light: #f8df6c;
+            --chatbot-primary-dark: #d03c08;
+            --chatbot-border: rgba(239, 87, 27, 0.4);
+            --chatbot-shadow: rgba(239, 87, 27, 0.3);
+            --chatbot-glow: rgba(239, 87, 27, 0.5);
+            
+            /* Maintain compatibility with older variable names */
+            --orange-primary: #EF571B;
+            --yellow-primary: #F3C846;
+            --accent-primary: #EF571B;
+            --accent-secondary: #F3C846;
+        }body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .test-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }        h1 {
+            font-family: 'Exo 2', sans-serif;
+            color: #EF571B;
+            margin-bottom: 1rem;
+        }
+        p {
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+        .test-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            background: linear-gradient(135deg, var(--chatbot-primary), var(--chatbot-secondary));
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--chatbot-shadow);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Sandex AI Chatbot Test</h1>
+        <p>This page is used to test the functionality of the hybrid chatbot system. Click the buttons below to interact with the chatbot.</p>
+        
+        <div class="test-buttons">
+            <button class="btn" id="toggleChat">Toggle Chat</button>
+            <button class="btn" id="sendTest">Send Test Message</button>
+        </div>
+    </div>
+
+    <!-- Floating Chat Button -->
+    <div id="floatingChatBtn" class="floating-chat-btn floating-chat-btn-modern">
+        <i class="fas fa-robot"></i>
+    </div>    <!-- Chat Interface (Hidden by default) -->
+    <div id="chatInterface" class="fixed bottom-0 right-0 z-50 w-full max-w-md hidden">        <div class="chat-container holographic-card p-6 bg-gray-900/95 backdrop-blur-2xl border border-orange-500/40 rounded-t-3xl mx-4 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-yellow-600 flex items-center justify-center shadow-lg pulse-soft">
+                        <i class="fas fa-robot text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-orange-400 font-exo font-bold text-xl tracking-tight">Sandex AI Assistant</h3>
+                </div>
+                <button id="closeChat" aria-label="Close Chat" title="Close chat window" class="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-orange-400 transition-all rounded-full bg-gray-800/60 hover:bg-orange-500/20 shadow-md">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            <div id="chatMessages" class="chat-messages h-96 overflow-y-auto mb-6 space-y-4 px-1 custom-scrollbar">
+                <!-- Messages will be added here dynamically -->
+            </div>            <div class="chat-input flex gap-2">
+                <input id="chatInput" type="text" placeholder="Type your message..." class="flex-1 px-4 py-3 bg-gray-800/70 border border-chatbot-border focus:border-chatbot-primary rounded-2xl text-light outline-none transition-all text-base shadow-inner font-exo" style="border-color: var(--chatbot-border); border-focus-color: var(--chatbot-primary);">                <button id="sendMessage" aria-label="Send Message" title="Send message" class="px-5 py-3 rounded-2xl text-white font-bold transition-all duration-300 glow-hover shadow-lg flex items-center justify-center text-lg" style="background-image: linear-gradient(to right, var(--chatbot-primary), var(--chatbot-secondary));">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Scripts -->
+    <script src="js/env.js"></script>
+    <script src="js/sandex-hybrid-chatbot.js"></script>
+    <script src="js/chatbot-ui.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('toggleChat');
+            const sendTestBtn = document.getElementById('sendTest');
+            
+            toggleBtn.addEventListener('click', function() {
+                window.toggleChatWindow();
+            });
+            
+            sendTestBtn.addEventListener('click', function() {
+                // First ensure the chat is open
+                const chatInterface = document.getElementById('chatInterface');
+                if (chatInterface.classList.contains('hidden')) {
+                    window.toggleChatWindow();
+                }
+                
+                // Set a test message and trigger send
+                const chatInput = document.getElementById('chatInput');
+                chatInput.value = "Tell me about Sandex AI services";
+                
+                // Trigger send after a small delay to ensure UI is updated
+                setTimeout(() => {
+                    document.getElementById('sendMessage').click();
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>

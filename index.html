@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sandex AI provides comprehensive technology solutions including artificial intelligence systems, technology consulting, tech training, system testing, and digital transformation to help organizations achieve efficiency and innovation.">
+    <meta name="keywords" content="Sandex AI, Artificial Intelligence, Digital Transformation, Technology Consulting, Tech Training, System Testing, AI Solutions">
+    <meta name="author" content="Sandex AI">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Sandex AI - Artificial Intelligence and Digital Transformation">
+    <meta property="og:description" content="Your Partner in Digital Transformation and AI Innovation. Comprehensive technology solutions for modern businesses.">
+    <meta property="og:image" content="images/sandex-logo-full.png">
+    <meta property="og:url" content="https://sandex.ai">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sandex AI - Artificial Intelligence and Digital Transformation">
+    <meta name="twitter:description" content="Your Partner in Digital Transformation and AI Innovation. Comprehensive technology solutions for modern businesses.">
+    <meta name="twitter:image" content="images/sandex-logo-full.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/icon.ico">
+    <link rel="apple-touch-icon" href="images/sandex-logo-icon.png">
+    
+    <title>Sandex AI - Artificial Intelligence and Digital Transformation</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts for Arabic -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Lateef&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.unified.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <!-- Schema.org markup for Google -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Sandex AI",
+        "url": "https://sandex.ai",
+        "logo": "images/sandex-logo-full.png",
+        "description": "Sandex AI provides comprehensive technology solutions including artificial intelligence systems, technology consulting, tech training, system testing, and digital transformation.",
+        "sameAs": [
+            "https://twitter.com/sandexai",
+            "https://linkedin.com/company/sandexai",
+            "https://facebook.com/sandexai"
+        ]
+    }
+    </script>
+    <!-- Set dark theme as default -->
+    <script>
+        document.documentElement.classList.add('dark-theme');
+    </script>
+</head>
+<body class="font-roboto">    <!-- Background Effects Container -->
+    <div class="effects-container">
+        <div class="grid-pattern"></div>
+        <div class="scanlines"></div>
+        <div id="particles-js"></div>
+    </div>
+
+    <!-- Floating Chat Button -->
+    <div id="floatingChatBtn" class="floating-chat-btn floating-chat-btn-modern">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 py-4 px-4 md:px-12 backdrop-blur-md bg-gray-900/80 border-b border-orange-500/20 transition-all duration-300">
+        <div class="container mx-auto flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#home" class="no-underline flex items-center logo-container">
+                <img src="images/sandex-logo-full.png" alt="Sandex AI Logo" class="h-14 object-contain">
+                <span class="logo-ai neon-glow font-exo font-bold text-orange-400 text-4xl tracking-tight align-middle ml-[-0.75rem]">.AI</span>
+            </a>
+            
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex space-x-8">
+                <a class="text-light hover:text-orange-400 transition-all duration-300 hover:glow-hover cyber-button px-3 py-1" href="#home">Home</a>
+                <a class="text-light hover:text-orange-400 transition-all duration-300 hover:glow-hover cyber-button px-3 py-1" href="#services">Services</a>
+                <a class="text-light hover:text-orange-400 transition-all duration-300 hover:glow-hover cyber-button px-3 py-1" href="#about">About</a>
+                <a class="text-light hover:text-orange-400 transition-all duration-300 hover:glow-hover cyber-button px-3 py-1" href="#contact">Contact</a>
+            </nav>
+            
+            <!-- CTA and Mobile Menu Button -->
+            <div class="flex items-center space-x-4">
+                <button id="chatToggle" class="hidden md:flex px-6 py-2 rounded-full text-white font-bold transition-all duration-300 glow-hover cyber-button" style="background-image: linear-gradient(to right, var(--chatbot-primary), var(--chatbot-secondary));">
+                    <i class="fas fa-comment-dots mr-2"></i> Chat with AI
+                </button>
+                
+                <button id="mobileMenuButton" aria-label="Mobile Menu" title="Toggle mobile menu" class="md:hidden text-2xl text-orange-400 hover:text-yellow-400 transition-all">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden absolute top-full left-0 w-full bg-gray-900/95 backdrop-blur-xl border-b border-orange-500/20 py-4">
+            <div class="container mx-auto px-4 flex flex-col space-y-4">
+                <a class="text-light hover:text-orange-400 transition-all py-2 border-b border-gray-800" href="#home">Home</a>
+                <a class="text-light hover:text-orange-400 transition-all py-2 border-b border-gray-800" href="#services">Services</a>
+                <a class="text-light hover:text-orange-400 transition-all py-2 border-b border-gray-800" href="#about">About</a>
+                <a class="text-light hover:text-orange-400 transition-all py-2" href="#contact">Contact</a>
+                <button onclick="window.toggleChatWindow()" class="w-full mt-4 px-6 py-2 rounded-full text-white font-bold transition-all duration-300 glow-hover cyber-button" style="background-image: linear-gradient(to right, var(--chatbot-primary), var(--chatbot-secondary));">
+                    <i class="fas fa-comment-dots mr-2"></i> Chat with AI
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-20">        <!-- Hero Section -->
+        <section id="home" class="relative z-10 py-16 sm:py-20 px-4 md:px-12 min-h-screen flex items-center">
+            <div class="container mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                    <div class="animate-on-scroll">
+                        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 font-exo leading-tight">
+                            <span class="gradient-text neon-flicker">Sandex AI for Integrated Solutions</span>
+                            <span class="block text-light mt-2">The Future of Digital Transformation and Artificial Intelligence</span>
+                        </h1>
+                        <p class="text-gray-400 text-base sm:text-lg mb-6 sm:mb-8">Your Partner in Digital Transformation and AI Innovation.</p>
+                        <div class="flex flex-col sm:flex-row flex-wrap gap-4">
+                            <a href="#contact" class="w-full sm:w-auto px-6 sm:px-8 py-3 bg-gradient-to-r from-orange-500 to-yellow-600 rounded-full text-white font-bold hover:from-orange-400 hover:to-yellow-500 transition-all duration-300 glow-hover cyber-button flex items-center justify-center">
+                                <span>Contact Us</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                            <a href="#services" class="w-full sm:w-auto px-6 sm:px-8 py-3 bg-transparent border border-orange-500/50 rounded-full text-orange-400 font-bold hover:bg-orange-500/10 transition-all duration-300 cyber-button flex items-center justify-center">
+                                <span>Our Services</span>
+                                <i class="fas fa-arrow-down ml-2"></i>
+                            </a>
+                        </div>
+                    </div><div class="relative animate-on-scroll">
+                        <div class="w-full h-96 bg-gradient-to-br from-orange-500/20 to-yellow-600/20 rounded-2xl backdrop-blur-sm border border-orange-500/30 overflow-hidden holographic-card">                            <div class="absolute inset-0 flex items-center justify-center">
+                                <!-- 3D Futuristic Animation -->
+                                <div class="w-64 h-64 relative">
+                                    <!-- Rotating Circle Layers -->
+                                    <div class="absolute top-0 left-0 w-full h-full rounded-full border-dashed-cyan rotating animation-duration-40s"></div>
+                                    <div class="absolute top-1/2 left-1/2 w-3/4 h-3/4 -translate-x-1/2 -translate-y-1/2 rounded-full border-dashed-purple rotating animation-reverse animation-duration-30s"></div>
+                                    
+                                    <!-- Holographic Data Connection Points -->
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <div class="w-32 h-32 bg-gray-900/60 backdrop-blur-md rounded-xl flex items-center justify-center rotate-45 pulse-soft">
+                                            <img src="images/sandex-logo-icon.png" alt="Sandex Logo" class="h-60 w-60 object-contain drop-shadow-xl logo-glow-cyan">
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Connection Lines -->
+                                    <svg class="absolute top-0 left-0 w-full h-full" viewBox="0 0 100 100">
+                                        <line x1="50" y1="10" x2="90" y2="50" stroke="rgba(6, 182, 212, 0.3)" stroke-width="0.5" />
+                                        <line x1="50" y1="10" x2="10" y2="50" stroke="rgba(6, 182, 212, 0.3)" stroke-width="0.5" />
+                                        <line x1="50" y1="90" x2="90" y2="50" stroke="rgba(6, 182, 212, 0.3)" stroke-width="0.5" />
+                                        <line x1="50" y1="90" x2="10" y2="50" stroke="rgba(6, 182, 212, 0.3)" stroke-width="0.5" />
+                                    </svg>
+                                </div>
+                            </div>
+                            
+                            <!-- Floating Icons -->
+                            <div class="absolute top-6 left-1/5 w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center magnetic-float">
+                                <i class="fas fa-brain text-orange-400"></i>
+                            </div>
+                            <div class="absolute top-10 right-1/6 w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center magnetic-float floating-delay-1">
+                                <i class="fas fa-cogs text-yellow-400"></i>
+                            </div>
+                            <div class="absolute bottom-8 left-1/4 w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center magnetic-float floating-delay-2">
+                                <i class="fas fa-shield-alt text-cyan-400"></i>
+                            </div>
+                            <div class="absolute bottom-12 right-1/5 w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center magnetic-float floating-delay-3">
+                                <i class="fas fa-code text-orange-400"></i>
+                            </div>
+                            <!-- More AI/Digital Transformation Floating Icons -->
+                            <div class="absolute top-1/2 left-8 w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center magnetic-float floating-delay-2" style="transform: translateY(-50%);">
+                                <i class="fas fa-robot text-cyan-400"></i>
+                            </div>
+                            <div class="absolute bottom-1/3 right-10 w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center magnetic-float floating-delay-1">
+                                <i class="fas fa-network-wired text-orange-400"></i>
+                            </div>
+                            <div class="absolute top-1/4 right-12 w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center magnetic-float floating-delay-3">
+                                <i class="fas fa-cloud text-cyan-400"></i>
+                            </div>
+                            <div class="absolute bottom-1/4 left-12 w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center magnetic-float floating-delay-2">
+                                <i class="fas fa-chart-line text-orange-400"></i>
+                            </div>
+                            <div class="absolute top-1/6 left-1/2 w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center magnetic-float floating-delay-1" style="transform: translateX(-50%);">
+                                <i class="fas fa-lightbulb text-cyan-400"></i>
+                            </div>
+                            <div class="absolute bottom-1/6 right-1/2 w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center magnetic-float floating-delay-3" style="transform: translateX(50%);">
+                                <i class="fas fa-database text-orange-400"></i>
+                            </div>
+                            <div class="absolute top-1/8 right-1/4 w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center magnetic-float floating-delay-2">
+                                <i class="fas fa-bolt text-cyan-400"></i>
+                            </div>
+                            <div class="absolute bottom-1/8 left-1/6 w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center magnetic-float floating-delay-1">
+                                <i class="fas fa-code-branch text-orange-400"></i>
+                            </div>
+                            <div class="absolute top-1/3 left-1/8 w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center magnetic-float floating-delay-3">
+                                <i class="fas fa-magic text-cyan-400"></i>
+                            </div>
+                            <div class="absolute bottom-1/5 right-1/8 w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center magnetic-float floating-delay-2">
+                                <i class="fas fa-sitemap text-orange-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="relative z-10 py-20 px-4 md:px-12 bg-gradient-to-b from-dark to-gray-900/50">
+            <div class="container mx-auto">
+                <div class="text-center mb-16 animate-on-scroll">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 font-exo">
+                        <span class="gradient-text neon-flicker">Our Services</span>
+                    </h2>
+                    <div class="w-24 h-1 bg-gradient-to-r from-orange-500 to-yellow-600 mx-auto mb-6"></div>
+                    <p class="text-gray-400 max-w-3xl mx-auto">
+                        We provide comprehensive technology solutions that help organizations thrive in the digital age.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Service Card 1 -->
+                    <div class="service-card bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-orange-500/20 hover:border-orange-500/40 transition-all duration-300 holographic-card animate-on-scroll" style="position: relative;">
+                        <span class="floating-service-icon magnetic-float icon-outside-top-left"><i class="fas fa-robot"></i></span>
+                        <div class="w-16 h-16 rounded-full bg-orange-500/10 flex items-center justify-center mb-6 pulse-soft">
+                            <i class="fas fa-brain text-orange-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-4">Artificial Intelligence and Digital Transformation</h3>
+                        <p class="text-gray-400">Implementing cutting-edge AI solutions and guiding your organization through comprehensive digital transformation.</p>
+                    </div>
+                    
+                    <!-- Service Card 2 -->
+                    <div class="service-card bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-orange-500/20 hover:border-orange-500/40 transition-all duration-300 holographic-card animate-on-scroll" style="position: relative;">
+                        <span class="floating-service-icon magnetic-float icon-outside-top-right"><i class="fas fa-graduation-cap"></i></span>
+                        <div class="w-16 h-16 rounded-full bg-yellow-500/10 flex items-center justify-center mb-6 pulse-soft">
+                            <i class="fas fa-graduation-cap text-yellow-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-4">Technology Training and IT Consulting</h3>
+                        <p class="text-gray-400">Expert training programs and strategic IT consulting to maximize your technological capabilities and workforce skills.</p>
+                    </div>
+                    
+                    <!-- Service Card 3 -->
+                    <div class="service-card bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-orange-500/20 hover:border-orange-500/40 transition-all duration-300 holographic-card animate-on-scroll" style="position: relative;">
+                        <span class="floating-service-icon magnetic-float icon-outside-bottom-left"><i class="fas fa-lock"></i></span>
+                        <div class="w-16 h-16 rounded-full bg-orange-500/10 flex items-center justify-center mb-6 pulse-soft">
+                            <i class="fas fa-cogs text-yellow-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-4">Cybersecurity and Data Protection</h3>
+                        <p class="text-gray-400">Comprehensive security solutions to protect your data and systems from evolving cyber threats and vulnerabilities.</p>
+                    </div>
+                    
+                    <!-- Service Card 4 -->
+                    <div class="service-card bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-orange-500/20 hover:border-orange-500/40 transition-all duration-300 holographic-card animate-on-scroll" style="position: relative;">
+                        <span class="floating-service-icon magnetic-float icon-outside-bottom-right"><i class="fas fa-cogs"></i></span>
+                        <div class="w-16 h-16 rounded-full bg-orange-500/10 flex items-center justify-center mb-6 pulse-soft">
+                            <i class="fas fa-cogs text-yellow-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-4">Custom Software Solutions Development</h3>
+                        <p class="text-gray-400">Tailored software development services designed to address your unique business challenges and requirements.</p>
+                    </div>
+                    
+                    <!-- Service Card 5 -->
+                    <div class="service-card bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-orange-500/20 hover:border-orange-500/40 transition-all duration-300 holographic-card animate-on-scroll" style="position: relative;">
+                        <span class="floating-service-icon magnetic-float icon-outside-top-left"><i class="fas fa-clipboard-check"></i></span>
+                        <div class="w-16 h-16 rounded-full bg-orange-500/10 flex items-center justify-center mb-6 pulse-soft">
+                            <i class="fas fa-clipboard-check text-orange-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-4">System and Software Testing for Quality Assurance</h3>
+                        <p class="text-gray-400">Rigorous testing methodologies to ensure the reliability, performance, and security of your systems and applications.</p>
+                    </div>
+
+                    <!-- Service Card 6 (Call to Action) -->
+                    <div class="service-card bg-gradient-to-br from-orange-500/20 to-yellow-600/20 p-6 rounded-xl border border-orange-500/30 transition-all duration-300 holographic-card animate-on-scroll flex flex-col justify-center items-center text-center" style="position: relative;">
+                        <span class="floating-service-icon magnetic-float icon-outside-bottom-right"><i class="fas fa-headset"></i></span>
+                        <div class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mb-6 pulse-soft">
+                            <i class="fas fa-headset text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-4">Need a Custom Solution?</h3>
+                        <p class="text-gray-200 mb-6">Contact us today to discuss your specific requirements and discover how we can help your business grow.</p>
+                        <a href="#contact" class="px-6 py-2 bg-gradient-to-r from-orange-500 to-yellow-600 rounded-full text-white font-bold hover:from-orange-400 hover:to-yellow-500 transition-all duration-300 glow-hover cyber-button">
+                            Contact Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="relative z-10 py-20 px-4 md:px-12">
+            <div class="container mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="relative animate-on-scroll order-2 lg:order-1">
+                        <div class="w-full aspect-video bg-gradient-to-br from-orange-500/20 to-yellow-600/20 rounded-2xl backdrop-blur-sm border border-orange-500/30 overflow-hidden holographic-card p-6 flex items-center justify-center">
+                            <div class="relative w-full max-w-md">
+                                <!-- Stats Cards with Holographic Effect -->
+                                <div class="absolute top-0 left-0 w-40 h-28 bg-gray-900/80 backdrop-blur-md rounded-lg border border-orange-500/30 p-4 transform -translate-y-1/2 -translate-x-1/4 floating">
+                                    <h4 class="text-orange-400 text-xs mb-1">Projects Completed</h4>
+                                    <p class="text-2xl font-bold text-light">250+</p>
+                                    <div class="mt-2 h-1 bg-gray-800 rounded-full overflow-hidden">
+                                        <div class="h-full w-3/4 bg-gradient-to-r from-orange-500 to-yellow-600 rounded-full"></div>
+                                    </div>
+                                </div>
+                                  <div class="absolute bottom-0 left-1/4 w-40 h-28 bg-gray-900/80 backdrop-blur-md rounded-lg border border-yellow-500/30 p-4 transform translate-y-1/3 floating floating-delay-1">
+                                    <h4 class="text-yellow-400 text-xs mb-1">Client Satisfaction</h4>
+                                    <p class="text-2xl font-bold text-light">98%</p>
+                                    <div class="mt-2 h-1 bg-gray-800 rounded-full overflow-hidden">
+                                        <div class="h-full w-11/12 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-full"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="absolute top-1/4 right-0 w-40 h-28 bg-gray-900/80 backdrop-blur-md rounded-lg border border-orange-500/30 p-4 transform translate-x-1/4 floating floating-delay-2">
+                                    <h4 class="text-orange-400 text-xs mb-1">Team Experts</h4>
+                                    <p class="text-2xl font-bold text-light">50+</p>
+                                    <div class="mt-2 h-1 bg-gray-800 rounded-full overflow-hidden">
+                                        <div class="h-full w-4/5 bg-gradient-to-r from-orange-500 to-yellow-600 rounded-full"></div>
+                                    </div>
+                                </div>                                <!-- Central Element - Interactive Icon Hub -->
+                                <div class="w-48 h-48 mx-auto rounded-full bg-gray-900/80 backdrop-blur-md border border-orange-500/50 flex items-center justify-center pulse-soft">
+                                    <div class="w-36 h-36 rounded-full bg-gradient-to-br from-orange-500/20 to-yellow-600/20 border border-orange-500/30 flex items-center justify-center relative">
+                                        <!-- Central Logo (replaces rocket icon) -->
+                                        <div class="w-24 h-24 rounded-full bg-gray-800/80 flex items-center justify-center glow main-logo-float">
+                                            <img src="images/sandex-logo-full.png" alt="Sandex AI Logo" class="h-20 w-20 object-contain drop-shadow-xl logo-glow-orange">
+                                        </div>
+                                        <!-- Orbiting Icons: Solar System Effect -->
+                                        <div class="absolute w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center orbit-animation orbit-delay-0" style="top: 0; left: 50%; transform: translate(-50%, -50%);">
+                                            <i class="fas fa-brain text-orange-400 text-lg"></i>
+                                        </div>
+                                        <div class="absolute w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center orbit-animation orbit-delay-2" style="top: 20%; right: 0; transform: translate(50%, -50%);">
+                                            <i class="fas fa-cogs text-yellow-400 text-lg"></i>
+                                        </div>
+                                        <div class="absolute w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center orbit-animation orbit-delay-4" style="bottom: 0; left: 50%; transform: translate(-50%, 50%);">
+                                            <i class="fas fa-robot text-orange-400 text-lg"></i>
+                                        </div>
+                                        <div class="absolute w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center orbit-animation orbit-delay-6" style="bottom: 20%; left: 0; transform: translate(-50%, 50%);">
+                                            <i class="fas fa-network-wired text-yellow-400 text-lg"></i>
+                                        </div>
+                                        <div class="absolute w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center orbit-animation orbit-delay-8" style="top: 50%; left: 0; transform: translate(-50%, -50%);">
+                                            <i class="fas fa-cloud text-orange-400 text-lg"></i>
+                                        </div>
+                                        <div class="absolute w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center orbit-animation orbit-delay-10" style="top: 50%; right: 0; transform: translate(50%, -50%);">
+                                            <i class="fas fa-chart-line text-yellow-400 text-lg"></i>
+                                        </div>
+                                        <!-- Connection Lines (SVG) -->
+                                        <svg class="absolute top-0 left-0 w-full h-full rotating animation-duration-50s" viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255, 140, 0, 0.1)" stroke-width="0.5" />
+                                            <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255, 184, 77, 0.1)" stroke-width="0.5" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="animate-on-scroll order-1 lg:order-2">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-6 font-exo">
+                            <span class="gradient-text neon-flicker">About Sandex AI</span>
+                        </h2>
+                        <div class="w-24 h-1 bg-gradient-to-r from-orange-500 to-yellow-600 mb-6"></div>
+                        <p class="text-gray-400 text-lg mb-6">
+                            Sandex for Integrated Solutions is a leading provider of artificial intelligence and digital transformation services. We combine cutting-edge technology with deep industry expertise to deliver solutions that drive business growth and innovation.
+                        </p>
+                        <p class="text-gray-400 text-lg mb-6">
+                            Our team of experts is dedicated to helping organizations navigate the complexities of digital transformation, providing tailored solutions that address specific business challenges and unlock new opportunities.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 mb-8">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-orange-500/10 flex items-center justify-center mr-3">
+                                    <i class="fas fa-check text-orange-400"></i>
+                                </div>
+                                <span class="text-light">Innovative Solutions</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center mr-3">
+                                    <i class="fas fa-check text-yellow-400"></i>
+                                </div>
+                                <span class="text-light">Expert Team</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-orange-500/10 flex items-center justify-center mr-3">
+                                    <i class="fas fa-check text-orange-400"></i>
+                                </div>
+                                <span class="text-light">Client-Focused Approach</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center mr-3">
+                                    <i class="fas fa-check text-yellow-400"></i>
+                                </div>
+                                <span class="text-light">Quality Assurance</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="relative z-10 py-20 px-4 md:px-12 bg-gradient-to-b from-dark to-gray-900/50">
+            <div class="container mx-auto">
+                <div class="text-center mb-16 animate-on-scroll">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 font-exo">
+                        <span class="gradient-text neon-flicker">Get in Touch</span>
+                    </h2>
+                    <div class="w-24 h-1 bg-gradient-to-r from-orange-500 to-yellow-600 mx-auto mb-6"></div>
+                    <p class="text-gray-400 max-w-3xl mx-auto">
+                        Have a question or want to discuss how we can help your business? Reach out to us today.
+                    </p>
+                </div>
+                
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-gray-900/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-800 relative overflow-hidden holographic-card animate-on-scroll">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="text-2xl font-bold text-light mb-6 font-exo">Contact Information</h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-orange-500/10 flex items-center justify-center mr-3">
+                                            <i class="fas fa-envelope text-orange-400"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-gray-300 text-sm">Email</h4>
+                                            <p class="text-light">info@sandex-ai.com</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center mr-3">
+                                            <i class="fas fa-phone text-yellow-400"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-gray-300 text-sm">Phone</h4>
+                                            <p class="text-light">+1 (XXX) XXX-XXXX</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                  <h3 class="text-xl font-bold text-light mt-8 mb-4 font-exo">Follow Us</h3>
+                                <div class="flex space-x-4">
+                                    <a href="#" aria-label="LinkedIn" title="Follow us on LinkedIn" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-orange-500/20 transition-all text-gray-400 hover:text-orange-400">
+                                        <i class="fab fa-linkedin-in"></i>
+                                    </a>
+                                    <a href="#" aria-label="Twitter" title="Follow us on Twitter" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-orange-500/20 transition-all text-gray-400 hover:text-orange-400">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                    <a href="#" aria-label="Facebook" title="Follow us on Facebook" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-orange-500/20 transition-all text-gray-400 hover:text-orange-400">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
+                                    <a href="#" aria-label="Instagram" title="Follow us on Instagram" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-orange-500/20 transition-all text-gray-400 hover:text-orange-400">
+                                        <i class="fab fa-instagram"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-2xl font-bold text-light mb-6 font-exo">Send a Message</h3>
+                                <form>
+                                    <div class="mb-4">
+                                        <input type="text" placeholder="Your Name" class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 focus:border-orange-500/50 rounded-lg text-light outline-none transition-all">
+                                    </div>
+                                    <div class="mb-4">
+                                        <input type="email" placeholder="Your Email" class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 focus:border-orange-500/50 rounded-lg text-light outline-none transition-all">
+                                    </div>
+                                    <div class="mb-4">
+                                        <textarea rows="4" placeholder="Your Message" class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 focus:border-orange-500/50 rounded-lg text-light outline-none transition-all resize-none"></textarea>
+                                    </div>
+                                    <button type="submit" class="w-full py-3 bg-gradient-to-r from-orange-500 to-yellow-600 rounded-lg text-white font-bold hover:from-orange-400 hover:to-yellow-500 transition-all duration-300 glow-hover cyber-button">
+                                        Send Message
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 bg-gray-900/95 backdrop-blur-xl border-t border-orange-500/20">
+        <div class="container mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div class="space-y-4">
+                    <div class="flex items-center logo-container">
+                        <img src="images/sandex-logo-full.png" alt="Sandex AI Logo" class="h-12 object-contain">
+                        <span class="logo-ai neon-glow font-exo font-bold text-orange-400 text-2xl tracking-tight align-middle ml-[-0.5rem]">.AI</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Your Partner in Digital Transformation and AI Innovation. We provide comprehensive technology solutions to help organizations thrive in the digital age.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="https://twitter.com/sandexai" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-orange-400 transition-colors" title="Follow Sandex AI on Twitter">
+                            <i class="fab fa-twitter text-xl"></i>
+                            <span class="sr-only">Follow Sandex AI on Twitter</span>
+                        </a>
+                        <a href="https://linkedin.com/company/sandexai" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-orange-400 transition-colors" title="Connect with Sandex AI on LinkedIn">
+                            <i class="fab fa-linkedin text-xl"></i>
+                            <span class="sr-only">Connect with Sandex AI on LinkedIn</span>
+                        </a>
+                        <a href="https://facebook.com/sandexai" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-orange-400 transition-colors" title="Like Sandex AI on Facebook">
+                            <i class="fab fa-facebook text-xl"></i>
+                            <span class="sr-only">Like Sandex AI on Facebook</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-light font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-orange-400 transition-colors">Home</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-orange-400 transition-colors">Services</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-orange-400 transition-colors">About Us</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-orange-400 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h3 class="text-light font-bold mb-4">Our Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#services" class="text-gray-400 hover:text-orange-400 transition-colors">AI Solutions</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-orange-400 transition-colors">Digital Transformation</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-orange-400 transition-colors">Tech Training</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-orange-400 transition-colors">System Testing</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact & Newsletter -->
+                <div>
+                    <h3 class="text-light font-bold mb-4">Stay Connected</h3>
+                    <p class="text-gray-400 text-sm mb-4">Subscribe to our newsletter for the latest updates and insights.</p>
+                    <form class="space-y-4">
+                        <div class="flex">
+                            <input type="email" placeholder="Enter your email" class="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-lg focus:outline-none focus:border-orange-500 text-light">
+                            <button type="submit" class="px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-600 rounded-r-lg text-white font-bold hover:from-orange-400 hover:to-yellow-500 transition-all duration-300">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="mt-4">
+                        <a href="#contact" class="inline-block px-6 py-2 bg-transparent border border-orange-500/50 rounded-full text-orange-400 font-bold hover:bg-orange-500/10 transition-all duration-300">
+                            Contact Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="mt-12 pt-8 border-t border-gray-800">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-sm">
+                        © 2024 Sandex AI. All rights reserved.
+                    </p>
+                    <div class="flex space-x-6 mt-4 md:mt-0">
+                        <a href="#" class="text-gray-400 hover:text-orange-400 text-sm transition-colors">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-orange-400 text-sm transition-colors">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-orange-400 text-sm transition-colors">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>    <!-- AI Chat Interface (Hidden by default, modernized) -->    
+    <div id="chatInterface" class="fixed bottom-0 right-0 z-50 w-full max-w-md hidden">
+        <div class="chat-container holographic-card p-6 rounded-t-3xl mx-4 shadow-2xl chat-elements-container">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center shadow-lg pulse-soft bg-gradient-chat">
+                        <i class="fas fa-robot text-white text-xl"></i>
+                    </div>
+                    <h3 class="font-exo font-bold text-xl tracking-tight chat-title">Sandex AI Assistant</h3>
+                </div>
+                <button id="closeChat" aria-label="Close Chat" title="Close chat window" class="w-10 h-10 flex items-center justify-center transition-all rounded-full shadow-md chat-close-btn">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            <div id="chatMessages" class="chat-messages h-96 overflow-y-auto mb-6 space-y-4 px-1 custom-scrollbar">
+                <!-- Messages will be added here dynamically -->
+            </div>
+            <div class="chat-input flex gap-2">
+                <input id="chatInput" type="text" placeholder="Type your message..." class="flex-1 px-4 py-3 rounded-2xl text-light outline-none transition-all text-base shadow-inner font-exo chat-input-field">
+                <button id="sendMessage" aria-label="Send Message" title="Send message" class="px-5 py-3 rounded-2xl text-white font-bold transition-all duration-300 glow-hover shadow-lg flex items-center justify-center text-lg chat-send-button">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.9.1/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="js/env.js"></script>
+    <script src="js/sandex-hybrid-chatbot.js"></script>
+    <script src="js/chatbot-ui.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

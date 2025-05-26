@@ -1,0 +1,23 @@
+# Environment variables and API keys
+js/env.js
+
+# Node modules (if used later for backend)
+node_modules/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Build files
+dist/
+build/

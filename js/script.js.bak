@@ -1,0 +1,530 @@
+document.addEventListener('DOMContentLoaded', function() {    // Initialize Particles.js
+    if (document.getElementById('particles-js')) {
+        particlesJS('particles-js', {            particles: {
+                number: {
+                    value: 100,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: document.documentElement.classList.contains('orange-theme') ? '#F39B39' : '#22d3ee'
+                },
+                shape: {
+                    type: 'circle',
+                    stroke: {
+                        width: 0,
+                        color: '#000000'
+                    },
+                    polygon: {
+                        nb_sides: 5
+                    }
+                },                opacity: {
+                    value: 0.5,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 0.3,
+                        opacity_min: 0.2,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 1.5,
+                        size_min: 0.1,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: document.documentElement.classList.contains('orange-theme') ? '#E0833F' : '#06b6d4',
+                    opacity: 0.4,
+                    width: 1.2
+                },                move: {
+                    enable: true,
+                    speed: 1.8,
+                    direction: 'none',
+                    random: true,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false,
+                    attract: {
+                        enable: true,
+                        rotateX: 600,
+                        rotateY: 1200
+                    }
+                }
+            },            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: 'grab'
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: 'push'
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 180,
+                        line_linked: {
+                            opacity: 0.8
+                        }
+                    },
+                    bubble: {
+                        distance: 200,
+                        size: 6,
+                        duration: 2,
+                        opacity: 0.8,
+                        speed: 3
+                    },
+                    repulse: {
+                        distance: 150,
+                        duration: 0.4
+                    },
+                    push: {
+                        particles_nb: 4
+                    },
+                    remove: {
+                        particles_nb: 2
+                    }
+                }
+            },
+            retina_detect: true
+        });
+    }    // Theme Toggle Functionality
+    const themeToggle = document.getElementById('themeToggle');
+    const darkIcon = document.querySelector('.dark-icon');
+    const orangeIcon = document.querySelector('.orange-icon');
+      
+    // Initialize theme based on localStorage or default to dark
+    if (localStorage.getItem('theme') === 'orange') {
+        document.documentElement.classList.remove('dark-theme');
+        document.documentElement.classList.add('orange-theme');
+        darkIcon.classList.add('hidden');
+        orangeIcon.classList.remove('hidden');
+    } else {
+        document.documentElement.classList.remove('orange-theme');
+        document.documentElement.classList.add('dark-theme');
+        darkIcon.classList.remove('hidden');
+        orangeIcon.classList.add('hidden');
+    }
+      
+    themeToggle.addEventListener('click', () => {
+        if (document.documentElement.classList.contains('orange-theme')) {
+            document.documentElement.classList.remove('orange-theme');
+            document.documentElement.classList.add('dark-theme');
+            darkIcon.classList.remove('hidden');
+            orangeIcon.classList.add('hidden');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.classList.remove('dark-theme');
+            document.documentElement.classList.add('orange-theme');
+            darkIcon.classList.add('hidden');
+            orangeIcon.classList.remove('hidden');
+            localStorage.setItem('theme', 'orange');
+        }
+        
+        // Update particles for the new theme
+        if (window.pJSDom && window.pJSDom.length > 0) {
+            const isOrangeTheme = document.documentElement.classList.contains('orange-theme');
+            window.pJSDom[0].pJS.particles.color.value = isOrangeTheme ? '#F39B39' : '#22d3ee';
+            window.pJSDom[0].pJS.particles.line_linked.color = isOrangeTheme ? '#E0833F' : '#06b6d4';
+            
+            // Update existing particles with proper colors
+            window.pJSDom[0].pJS.particles.array.forEach(p => {
+                p.color.value = isOrangeTheme ? '#F39B39' : '#22d3ee';
+                p.color.rgb = isOrangeTheme ? 
+                    { r: 243, g: 155, b: 57 } : 
+                    { r: 34, g: 211, b: 238 };
+            });
+            
+            // Update interactivity settings based on theme
+            window.pJSDom[0].pJS.interactivity.modes.grab.distance = isOrangeTheme ? 150 : 180;
+            window.pJSDom[0].pJS.interactivity.modes.grab.line_linked.opacity = isOrangeTheme ? 0.6 : 0.8;
+            
+            // Refresh the particles
+            window.pJSDom[0].pJS.fn.particlesRefresh();
+        }
+        }
+    });
+
+    // Mobile Menu Toggle
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Chat Interface Toggle - Handle both buttons
+    const chatToggle = document.getElementById('chatToggle');
+    const floatingChatBtn = document.getElementById('floatingChatBtn');
+    const chatInterface = document.getElementById('chatInterface');
+    const closeChat = document.getElementById('closeChat');
+    
+   // Function to open chat with welcome message
+function openChatWithWelcome() {
+    chatInterface.classList.remove('hidden');
+    document.getElementById('chatInput').focus();
+    // Add welcome message after a slight delay
+    setTimeout(() => {
+        if (document.querySelectorAll('.chat-messages .flex').length === 0) {
+            addMessage("👋 Hey there! Welcome to Sandex AI 🚀. How can I help you today with digital transformation or AI-powered solutions? Let’s unlock your business potential together!", "ai");
+        }
+    }, 600);
+}
+    
+    chatToggle.addEventListener('click', openChatWithWelcome);
+    
+    floatingChatBtn.addEventListener('click', openChatWithWelcome);
+    
+    closeChat.addEventListener('click', () => {
+        chatInterface.classList.add('hidden');
+    });    // Enhanced mouse movement effect for particles
+    document.addEventListener('mousemove', (e) => {
+        if (window.pJSDom && window.pJSDom.length > 0) {
+            // Get mouse position
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+            
+            // Update the particles.js mouse position
+            window.pJSDom[0].pJS.interactivity.mouse.pos_x = mouseX;
+            window.pJSDom[0].pJS.interactivity.mouse.pos_y = mouseY;
+            
+            // Simulate mouse hover to make particles react
+            window.pJSDom[0].pJS.interactivity.status = 'mousemove';
+            
+            // Create a gentle attraction effect
+            const particles = window.pJSDom[0].pJS.particles.array;
+            const isOrangeTheme = document.documentElement.classList.contains('orange-theme');
+            
+            // Add subtle movement toward cursor for nearby particles
+            particles.forEach(p => {
+                const dx = mouseX - p.x;
+                const dy = mouseY - p.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                  // Only affect particles within a certain range
+                if (distance < 200) {
+                    const forceX = dx / (isOrangeTheme ? 100 : 80);
+                    const forceY = dy / (isOrangeTheme ? 100 : 80);
+                    
+                    // Apply gentle force toward cursor
+                    p.vx += forceX * 0.02;
+                    p.vy += forceY * 0.02;
+                }
+            });
+        }
+    });
+    
+    // Hide the effect when cursor leaves the window
+    document.addEventListener('mouseleave', () => {
+        if (window.pJSDom && window.pJSDom.length > 0) {
+            window.pJSDom[0].pJS.interactivity.status = 'mouseleave';
+        }
+    });
+
+    // Add custom mouse interaction handler 
+    function enhanceParticleInteraction() {
+        // Wait until particles are initialized
+        if (window.pJSDom && window.pJSDom.length > 0) {
+            const canvas = document.querySelector('#particles-js canvas');
+            if (!canvas) return;
+            
+            // Add enhanced touch support for mobile devices
+            canvas.addEventListener('touchmove', function(e) {
+                if (e.touches.length > 0 && window.pJSDom && window.pJSDom.length > 0) {
+                    // Get touch position
+                    const rect = canvas.getBoundingClientRect();
+                    const touchX = e.touches[0].clientX - rect.left;
+                    const touchY = e.touches[0].clientY - rect.top;
+                    
+                    // Update the particles.js mouse position
+                    window.pJSDom[0].pJS.interactivity.mouse.pos_x = touchX;
+                    window.pJSDom[0].pJS.interactivity.mouse.pos_y = touchY;
+                    
+                    // Simulate mouse hover to make particles react
+                    window.pJSDom[0].pJS.interactivity.status = 'mousemove';
+                    
+                    // Prevent default behavior to avoid scrolling
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            // Reset on touch end
+            canvas.addEventListener('touchend', function() {
+                if (window.pJSDom && window.pJSDom.length > 0) {
+                    window.pJSDom[0].pJS.interactivity.status = 'mouseleave';
+                }
+            });
+        } else {
+            // If particles not yet initialized, try again in a moment
+            setTimeout(enhanceParticleInteraction, 500);
+        }
+    }
+
+    // Call this after particles are initialized
+    setTimeout(enhanceParticleInteraction, 1000);
+
+    // Add entrance animations to page elements
+    function applyEntranceAnimations() {
+        // Header elements
+        const header = document.querySelector('header');
+        if (header) {
+            header.classList.add('fade-in-down');
+        }
+        
+        // Hero section elements
+        const heroTitle = document.querySelector('#home h1');
+        const heroText = document.querySelector('#home p');
+        const heroButtons = document.querySelectorAll('#home a.cyber-button');
+        
+        if (heroTitle) heroTitle.classList.add('fade-in-up', 'delay-300');
+        if (heroText) heroText.classList.add('fade-in-up', 'delay-500');
+        
+        heroButtons.forEach((button, index) => {
+            button.classList.add('fade-in-up', `delay-${(index + 7) * 100}`);
+        });
+        
+        // Hero image/animation
+        const heroImage = document.querySelector('#home .holographic-card');
+        if (heroImage) heroImage.classList.add('zoom-in', 'delay-800');
+        
+        // Add fade-in effects to all section titles
+        const sectionTitles = document.querySelectorAll('section h2');
+        sectionTitles.forEach(title => {
+            title.classList.add('fade-in-up');
+        });
+    }
+    
+    // Apply entrance animations after a short delay
+    setTimeout(applyEntranceAnimations, 300);    // Automatically open chat after 3 seconds, but only on first load
+    if (!sessionStorage.getItem('chatShown')) {
+        setTimeout(() => {
+            openChatWithWelcome();
+            sessionStorage.setItem('chatShown', 'true');
+        }, 3000);
+    }
+
+    // Chat Functionality with DeepSeek API    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const sendMessage = document.getElementById('sendMessage');    // Function to add a message to the chat interface
+    function addMessage(message, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'flex mb-4';
+        
+        // Add emojis to AI responses
+        let formattedMessage = message;
+        if (sender === 'ai') {
+            // Process message text (convert line breaks to <br>)
+            formattedMessage = message.replace(/\n/g, '<br>');
+            
+            // Add emojis based on content
+            if (formattedMessage.toLowerCase().includes('hello') || formattedMessage.toLowerCase().includes('hi')) {
+                formattedMessage = '👋 ' + formattedMessage;
+            } else if (formattedMessage.toLowerCase().includes('thank')) {
+                formattedMessage = '🙏 ' + formattedMessage;
+            } else if (formattedMessage.toLowerCase().includes('help')) {
+                formattedMessage = '🤝 ' + formattedMessage;
+            } else if (formattedMessage.toLowerCase().includes('sorry')) {
+                formattedMessage = '😔 ' + formattedMessage;
+            } else if (formattedMessage.toLowerCase().includes('success') || formattedMessage.toLowerCase().includes('great')) {
+                formattedMessage = '🎉 ' + formattedMessage;
+            } else if (formattedMessage.toLowerCase().includes('important')) {
+                formattedMessage = '⚠️ ' + formattedMessage;
+            } else if (formattedMessage.length < 50) {
+                // For short responses, add a friendly emoji
+                const shortEmojis = ['✨', '👍', '💡', '✅', '🔍', '💯'];
+                formattedMessage = shortEmojis[Math.floor(Math.random() * shortEmojis.length)] + ' ' + formattedMessage;
+            } else if (formattedMessage.length > 200) {
+                // For longer, detailed responses
+                formattedMessage = '📝 ' + formattedMessage;
+            } else {
+                // For medium length responses, randomly select
+                const randomEmojis = ['🤖', '💬', '🔆', '📊', '🚀', '🌟', '💡', '✨'];
+                const randomIndex = Math.floor(Math.random() * randomEmojis.length);
+                formattedMessage = randomEmojis[randomIndex] + ' ' + formattedMessage;
+            }
+        }
+        
+        if (sender === 'user') {
+            messageDiv.innerHTML = `
+                <div class="ml-auto bg-purple-500/10 rounded-lg px-4 py-3 text-sm max-w-xs border border-purple-500/30">
+                    ${message}
+                </div>
+                <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center ml-2">
+                    <i class="fas fa-user text-purple-400"></i>
+                </div>
+            `;
+        } else {
+            messageDiv.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center mr-2">
+                    <i class="fas fa-robot text-cyan-400"></i>
+                </div>
+                <div class="bg-cyan-500/10 rounded-lg px-4 py-3 text-sm max-w-xs border border-cyan-500/30">
+                    ${formattedMessage}
+                </div>
+            `;
+        }
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }// Function to handle sending a message
+    async function sendChatMessage() {
+        const message = chatInput.value.trim();
+        if (message === '') return;
+        
+        // Add user's message to chat
+        addMessage(message, 'user');
+        chatInput.value = '';
+        
+        // Add typing indicator
+        const typingIndicator = document.createElement('div');
+        typingIndicator.className = 'flex mb-4 typing-indicator';
+        typingIndicator.innerHTML = `
+            <div class="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center mr-2">
+                <i class="fas fa-robot text-cyan-400"></i>
+            </div>
+            <div class="bg-cyan-500/10 rounded-lg px-4 py-3 text-sm max-w-xs border border-cyan-500/30">
+                <span class="typing-dot">.</span>
+                <span class="typing-dot">.</span>
+                <span class="typing-dot">.</span>
+            </div>
+        `;
+        chatMessages.appendChild(typingIndicator);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+          try {
+            // DeepSeek API integration
+            const response = await callDeepSeekAPI(message);
+            
+            // Remove typing indicator
+            chatMessages.removeChild(typingIndicator);
+            
+            // Add AI response
+            addMessage(response, 'ai');
+            
+        } catch (error) {
+            console.error('Error communicating with DeepSeek API:', error);
+            chatMessages.removeChild(typingIndicator);
+            
+            // Show a more user-friendly error message
+            const errorMessage = error.message && error.message.includes('API key') 
+                ? 'There seems to be an issue with the AI service authentication. Please contact the administrator.'
+                : 'Sorry, I encountered an error while processing your request. Please try again later.';
+                
+            addMessage(errorMessage, 'ai');
+        }
+    }
+      // Function to call DeepSeek API
+    async function callDeepSeekAPI(userMessage) {
+        try {
+            // Check if the DeepSeek configuration exists
+            if (typeof DEEPSEEK_CONFIG === 'undefined') {
+                console.error('DeepSeek configuration not found. Please ensure env.js is loaded correctly.');
+                return 'Sorry, there was an issue with the AI configuration. Please try again later.';
+            }
+            
+            // Prepare API request to DeepSeek
+            const response = await fetch(DEEPSEEK_CONFIG.API_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${DEEPSEEK_CONFIG.API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: DEEPSEEK_CONFIG.MODEL,                    messages: [
+                        {
+                            role: "system",
+                            content: "You are a helpful and engaging AI assistant for Sandex for Artificial Intelligence and Digital Transformation. Your personality is friendly, professional, and occasionally witty. Customize your responses based on the query type:\n\n1. For simple questions: Provide brief, direct answers (1-2 sentences)\n2. For complex technical questions: Offer detailed, structured explanations with bullet points where helpful\n3. For inquiries about services: Highlight relevant Sandex AI offerings with clear benefits\n\nYou provide information about Sandex AI services, including artificial intelligence solutions, digital transformation, technology training, cybersecurity, custom software development, and system testing. When uncertain, suggest contacting Sandex directly for more information. Use professional but conversational language that reflects the futuristic and innovative nature of Sandex."
+                        },
+                        {
+                            role: "user",
+                            content: userMessage
+                        }
+                    ],
+                    max_tokens: DEEPSEEK_CONFIG.MAX_TOKENS,
+                    temperature: DEEPSEEK_CONFIG.TEMPERATURE
+                })
+            });
+            
+            // Parse the API response
+            const data = await response.json();
+            
+            // Handle errors
+            if (!response.ok) {
+                console.error('DeepSeek API error:', data);
+                return `Sorry, there was an error with the AI service. (${data.error?.message || 'Unknown error'})`;
+            }
+            
+            // Return the AI's response
+            return data.choices[0].message.content;
+            
+        } catch (error) {
+            console.error('DeepSeek API error:', error);
+            return 'Sorry, I encountered an error while processing your request. Please try again later.';
+        }
+    }
+      // Event listeners for chat
+    sendMessage.addEventListener('click', sendChatMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendChatMessage();
+        }
+    });
+
+    // Animate elements when they come into view
+    const animateOnScroll = function() {
+        const elements = document.querySelectorAll('.animate-on-scroll');
+        
+        elements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            const elementVisible = 150;
+            
+            if (elementTop < window.innerHeight - elementVisible) {
+                element.classList.add('active');
+            }
+        });
+    };
+    
+    // Add animation to elements already in view on page load
+    animateOnScroll();
+    
+    // Trigger animations on scroll
+    window.addEventListener('scroll', animateOnScroll);
+    
+    // Initialize GSAP animations for holographic cards
+    const cards = document.querySelectorAll('.holographic-card');
+    
+    cards.forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) - 0.5;
+            const y = ((e.clientY - rect.top) / rect.height) - 0.5;
+            
+            gsap.to(card, {
+                rotationY: x * 5,
+                rotationX: -y * 5,
+                duration: 0.5,
+                ease: 'power1.out'
+            });
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            gsap.to(card, {
+                rotationY: 0,
+                rotationX: 0,
+                duration: 0.5,
+                ease: 'power1.out'
+            });
+        });
+    });
+});
