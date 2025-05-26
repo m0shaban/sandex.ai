@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandex AI - Hybrid Chatbot Demo</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #EF571B;
+            --secondary: #F3C846;
+            --dark: #121212;
+            --light: #f8fafc;
+            --border: rgba(239, 87, 27, 0.4);
+            --shadow: rgba(239, 87, 27, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Exo 2', sans-serif;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .logo {
+            width: 120px;
+            margin-bottom: 1rem;
+        }
+        
+        .header-title {
+            color: white;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .card {
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .feature-card {
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px var(--shadow);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        
+        .feature-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+        
+        .code-block {
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 6px;
+            padding: 1rem;
+            font-family: monospace;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .highlight {
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 600;
+            margin: 1rem 0;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+        
+        .demo-section {
+            padding: 4rem 0;
+            background-color: rgba(239, 87, 27, 0.1);
+            margin: 3rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .test-case {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .test-input, .test-output {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+        
+        .test-input {
+            background-color: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .test-output {
+            background-color: rgba(239, 87, 27, 0.15);
+            border-left: 4px solid var(--secondary);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            border-top: 1px solid var(--border);
+            color: rgba(255,255,255,0.6);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <img src="sandex-logo-icon.png" alt="Sandex AI" class="logo">
+            <h1 class="header-title">Sandex AI Hybrid Chatbot Demo</h1>
+            <p>A demonstration of the intelligent keyword-based chatbot system that operates without requiring an API connection</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="card">
+            <h2><i class="fas fa-robot"></i> About The Hybrid System</h2>
+            <p>The Sandex AI chatbot has been enhanced to operate as a hybrid system that prioritizes keyword-based responses while providing intelligent fallbacks. This ensures the chatbot continues to function effectively even when the DeepSeek API is unavailable or when you choose not to use an API connection.</p>
+            <p>Our implementation focuses on creating a seamless user experience where the transition between API-powered responses and keyword-based responses is undetectable to the end user.</p>
+            
+            <div class="code-block">
+                <span class="highlight">// Core hybrid system design</span><br>
+                async generateResponse(userMessage) {<br>
+                &nbsp;&nbsp;// First attempt to match from keyword database<br>
+                &nbsp;&nbsp;const keywordMatch = this.findKeywordMatch(userMessage);<br>
+                &nbsp;&nbsp;<br>
+                &nbsp;&nbsp;// If we have a good keyword match and prefer keywords, use it<br>
+                &nbsp;&nbsp;if (keywordMatch && keywordMatch.confidence > this.threshold && <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;(DEEPSEEK_CONFIG?.PREFER_KEYWORDS || !this.apiEnabled)) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;return {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;response: keywordMatch.response,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;source: 'keyword',<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;confidence: keywordMatch.confidence<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                &nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;<br>
+                &nbsp;&nbsp;// Try API if enabled<br>
+                &nbsp;&nbsp;if (this.apiEnabled) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;try {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// API call logic<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;} catch (error) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// API failed, use fallback system<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;<br>
+                &nbsp;&nbsp;// Use intelligent fallback system<br>
+                &nbsp;&nbsp;const intelligentFallback = this.getIntelligentFallback(userMessage);<br>
+                &nbsp;&nbsp;if (intelligentFallback) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;return intelligentFallback;<br>
+                &nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;<br>
+                &nbsp;&nbsp;// Last resort: emergency fallback<br>
+                &nbsp;&nbsp;return this.getEmergencyFallback();<br>
+                }
+            </div>
+            
+            <a href="test-chatbot.html" class="btn">Try the Interactive Demo</a>
+        </section>
+        
+        <section>
+            <h2><i class="fas fa-lightbulb"></i> Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="feature-icon"><i class="fas fa-search"></i></span>
+                    <h3 class="feature-title">Advanced Keyword Matching</h3>
+                    <p>Our system uses sophisticated partial matching algorithms to recognize keywords even with spelling variations or when embedded in longer phrases.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon"><i class="fas fa-brain"></i></span>
+                    <h3 class="feature-title">Context-Aware Analysis</h3>
+                    <p>When direct keyword matches aren't found, the system analyzes the context of the query to provide relevant responses based on the overall topic.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon"><i class="fas fa-language"></i></span>
+                    <h3 class="feature-title">Bilingual Support</h3>
+                    <p>The chatbot automatically detects whether the user is typing in English or Arabic and responds in the appropriate language.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon"><i class="fas fa-shield-alt"></i></span>
+                    <h3 class="feature-title">Resilient Architecture</h3>
+                    <p>The multi-level fallback system ensures users always receive helpful responses, even when their queries fall outside the predefined knowledge base.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="demo-section">
+            <h2><i class="fas fa-vial"></i> Test Cases & Results</h2>
+            
+            <div class="test-case">
+                <h3>Test Case 1: Direct Keyword Match</h3>
+                <div class="test-input">
+                    <strong>User Query:</strong> "Tell me about your AI services"
+                </div>
+                <div class="test-output">
+                    <strong>Response:</strong> "🤖 <strong>Sandex AI Services:</strong><br><br>• AI/ML implementation & optimization<br>• Digital transformation solutions<br>• Legacy system modernization<br>• Predictive analytics & neural networks<br>• Generative AI integration<br>• Edge computing solutions<br><br>✅ <strong>Our Results:</strong> 40% faster processing, 25-30% cost savings<br><br>🏆 <strong>Technologies:</strong> C++, Python, TensorFlow, PyTorch<br><br>📞 Contact: +20 1000066161 | mharty@sandexai.com"
+                </div>
+                <p><strong>Explanation:</strong> The system identified the keywords "AI" and "services" and matched them to the "ai_services" category with high confidence.</p>
+            </div>
+            
+            <div class="test-case">
+                <h3>Test Case 2: Partial Keyword Match</h3>
+                <div class="test-input">
+                    <strong>User Query:</strong> "How do you protect against cyber threats?"
+                </div>
+                <div class="test-output">
+                    <strong>Response:</strong> "🔐 <strong>Sandex Cybersecurity:</strong><br><br>• Security assessments & audits<br>• Penetration testing & vulnerability assessment<br>• Data protection (ISO 27001 compliant)<br>• Threat detection & response systems<br>• Critical infrastructure protection<br>• Security training & awareness programs<br><br>👥 <strong>Certified Team:</strong> CEH, CompTIA Security+<br>🏛️ <strong>Experience:</strong> Government & enterprise security across Egypt & Saudi Arabia<br>🛡️ <strong>Approach:</strong> Proactive threat hunting and zero-trust architecture<br><br>📞 Contact: +20 1000066161 | mharty@sandexai.com"
+                </div>
+                <p><strong>Explanation:</strong> The system recognized "cyber threats" as related to "cybersecurity" and provided the relevant response, even though the exact keywords weren't used.</p>
+            </div>
+            
+            <div class="test-case">
+                <h3>Test Case 3: Arabic Input Detection</h3>
+                <div class="test-input">
+                    <strong>User Query:</strong> "ما هي خدمات الذكاء الاصطناعي التي تقدمونها؟"
+                </div>
+                <div class="test-output">
+                    <strong>Response:</strong> "🤖 <strong>خدمات ساندكس للذكاء الاصطناعي:</strong><br><br>• تطبيق وتحسين حلول الذكاء الاصطناعي<br>• حلول التحول الرقمي<br>• تحديث الأنظمة القديمة<br>• التحليلات التنبؤية والشبكات العصبية<br>• تكامل الذكاء الاصطناعي التوليدي<br>• حلول الحوسبة الطرفية<br><br>✅ <strong>نتائجنا:</strong> معالجة أسرع بنسبة 40%، توفير 25-30% من التكاليف<br><br>🏆 <strong>التقنيات:</strong> C++, Python, TensorFlow, PyTorch<br><br>📞 اتصال: +20 1000066161 | mharty@sandexai.com"
+                </div>
+                <p><strong>Explanation:</strong> The system detected Arabic characters, identified the query as being about AI services, and provided the appropriate response in Arabic.</p>
+            </div>
+            
+            <div class="test-case">
+                <h3>Test Case 4: Contextual Fallback</h3>
+                <div class="test-input">
+                    <strong>User Query:</strong> "Can you tell me about your track record with government projects?"
+                </div>
+                <div class="test-output">
+                    <strong>Response:</strong> "🏆 <strong>Sandex Government Project Experience:</strong><br><br>Our government sector achievements include:<br>• 40% faster processing of citizen applications<br>• 200%+ increase in citizen participation rates<br>• Secure platforms meeting international compliance standards<br>• Specialized data security protocols for sensitive information<br><br>We've worked with government agencies in Egypt and Saudi Arabia, focusing on digital transformation, cybersecurity implementation, and AI-enabled services.<br><br>📊 <strong>Key Results:</strong><br>• Modernized legacy systems while preserving critical data<br>• Implemented secure access protocols and audit trails<br>• Provided comprehensive staff training and knowledge transfer<br><br>For specific government project inquiries: mharty@sandexai.com | +20 1000066161"
+                </div>
+                <p><strong>Explanation:</strong> The system couldn't find an exact match for "government projects" but analyzed the context and provided information from the "projects" category, focusing on the government sector aspects.</p>
+            </div>
+        </section>
+        
+        <section class="card">
+            <h2><i class="fas fa-cogs"></i> Implementation Details</h2>
+            <p>The hybrid chatbot system is implemented through several key components:</p>
+            
+            <h3>1. Enhanced Keyword Database</h3>
+            <p>We've expanded the keyword database with comprehensive categories covering all Sandex services and common queries in both English and Arabic.</p>
+            
+            <h3>2. Advanced Matching Algorithm</h3>
+            <p>Our matching algorithm uses a sophisticated scoring system that considers:</p>
+            <ul style="margin-left: 2rem; margin-bottom: 1.5rem;">
+                <li>Direct keyword matches (highest confidence)</li>
+                <li>Partial matching with proportional confidence</li>
+                <li>Word proximity and position for context relevance</li>
+                <li>Language-specific matching techniques</li>
+            </ul>
+            
+            <h3>3. Multi-Level Fallback System</h3>
+            <p>When direct keyword matches aren't found, the system uses:</p>
+            <ol style="margin-left: 2rem; margin-bottom: 1.5rem;">
+                <li>Context analysis to determine the most relevant topic</li>
+                <li>Topic-based intelligent fallbacks with varying confidence levels</li>
+                <li>Emergency fallbacks that provide professionally diplomatic responses</li>
+            </ol>
+            
+            <h3>4. Configuration Options</h3>
+            <div class="code-block">
+                const DEEPSEEK_CONFIG = {<br>
+                &nbsp;&nbsp;// API Settings - Can be placeholder values<br>
+                &nbsp;&nbsp;API_KEY: 'your_api_key_here',<br>
+                &nbsp;&nbsp;<br>
+                &nbsp;&nbsp;// Hybrid System Configuration<br>
+                &nbsp;&nbsp;HYBRID_MODE: true,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Enable hybrid mode<br>
+                &nbsp;&nbsp;KEYWORD_THRESHOLD: 0.6,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Confidence threshold<br>
+                &nbsp;&nbsp;PREFER_KEYWORDS: true,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Prefer keywords over API<br>
+                &nbsp;&nbsp;SIMULATE_API_LATENCY: true,&nbsp;&nbsp;// Add natural typing delays<br>
+                &nbsp;&nbsp;DEBUG_MODE: false&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Enable debugging logs<br>
+                };
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>© 2025 Sandex AI - Hybrid Chatbot Demo</p>
+            <p>Created by Sandex AI Development Team</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Simple animation for feature cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.feature-card');
+            
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        card.style.transition = 'opacity 0.5s, transform 0.5s';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

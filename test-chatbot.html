@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sandex AI Chatbot Test</title>
+    <title>Sandex AI Hybrid Chatbot Test</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/styles.unified.css">    <style>
+    <link rel="stylesheet" href="css/styles.unified.css">
+    <style>
         :root {
             /* Chatbot Color Variables */
             --chatbot-primary: #EF571B;
@@ -26,7 +27,9 @@
             --yellow-primary: #F3C846;
             --accent-primary: #EF571B;
             --accent-secondary: #F3C846;
-        }body {
+        }
+        
+        body {
             margin: 0;
             padding: 0;
             font-family: 'Roboto', sans-serif;
@@ -38,24 +41,34 @@
             align-items: center;
             justify-content: center;
         }
+        
         .test-container {
             text-align: center;
             margin-bottom: 2rem;
-        }        h1 {
+            padding: 2rem;
+            max-width: 900px;
+        }
+        
+        h1 {
             font-family: 'Exo 2', sans-serif;
             color: #EF571B;
             margin-bottom: 1rem;
         }
+        
         p {
             margin-bottom: 2rem;
             max-width: 600px;
+            margin: 0 auto 2rem;
         }
+        
         .test-buttons {
             display: flex;
             gap: 1rem;
             justify-content: center;
             margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
+        
         .btn {
             background: linear-gradient(135deg, var(--chatbot-primary), var(--chatbot-secondary));
             color: white;
@@ -66,21 +79,274 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-        }        .btn:hover {
+            margin: 0.5rem;
+        }
+        
+        .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 15px var(--chatbot-shadow);
+        }
+        
+        .test-info {
+            background-color: rgba(239, 87, 27, 0.1);
+            border: 1px solid rgba(239, 87, 27, 0.3);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-top: 2rem;
+            text-align: left;
+            max-width: 800px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .test-info h3 {
+            margin-top: 0;
+            color: var(--chatbot-primary);
+        }
+        
+        .test-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .test-case {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .test-case:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .test-case-title {
+            font-weight: bold;
+            color: var(--chatbot-secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        code {
+            font-family: monospace;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.3rem;
+            font-size: 0.9em;
+        }
+        
+        .debug-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--chatbot-border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            max-width: 300px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            z-index: 1000;
+            display: none;
+        }
+        
+        /* Typing animation */
+        @keyframes typingDot {
+            0% { opacity: 0.2; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-2px); }
+            100% { opacity: 0.2; transform: translateY(0); }
+        }
+        
+        .typing-dot {
+            display: inline-block;
+            animation: typingDot 1s infinite;
+            margin: 0 1px;
+            font-size: 1.5em;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        .chat-messages-container {
+            min-height: 200px;
+            max-height: 350px;
+            overflow-y: auto;
+            padding: 1rem 0.5rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--chatbot-primary) rgba(0,0,0,0.1);
+        }
+        
+        .chat-messages-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-messages-container::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+            border-radius: 3px;
+        }
+        
+        .chat-messages-container::-webkit-scrollbar-thumb {
+            background-color: var(--chatbot-primary);
+            border-radius: 3px;
+        }
+        
+        .floating-chat-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--chatbot-primary), var(--chatbot-secondary));
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .floating-chat-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(239, 87, 27, 0.4);
+        }
+        
+        .floating-chat-btn-modern {
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 20px rgba(239, 87, 27, 0.5),
+                        inset 0 2px 10px rgba(255, 255, 255, 0.2);
+        }
+        
+        .chat-container {
+            box-shadow: 0 -5px 30px rgba(0, 0, 0, 0.3),
+                        0 5px 15px rgba(239, 87, 27, 0.2),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        }
+        
+        .pulse-soft {
+            animation: pulse-animation 2s infinite;
+        }
+        
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0 rgba(239, 87, 27, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 87, 27, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 87, 27, 0); }
+        }
+        
+        .fixed {
+            position: fixed;
+        }
+        
+        .bottom-0 {
+            bottom: 0;
+        }
+        
+        .right-0 {
+            right: 0;
+        }
+        
+        .z-50 {
+            z-index: 50;
+        }
+        
+        .w-full {
+            width: 100%;
+        }
+        
+        .max-w-md {
+            max-width: 28rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .holographic-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .holographic-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                ellipse at center,
+                rgba(255, 255, 255, 0.15) 0%,
+                rgba(255, 255, 255, 0.05) 30%,
+                rgba(255, 255, 255, 0) 60%
+            );
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            transform: translate(-30%, -30%);
+        }
+        
+        .holographic-card:hover::before {
+            opacity: 1;
+            animation: holographic 2s infinite linear;
+        }
+        
+        @keyframes holographic {
+            0% { transform: translate(-30%, -30%) rotate(0deg); }
+            100% { transform: translate(-30%, -30%) rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="test-container">
-        <h1>Sandex AI Chatbot Test</h1>
-        <p>This page is used to test the functionality of the hybrid chatbot system. Click the buttons below to interact with the chatbot.</p>
+        <h1>Sandex AI Hybrid Chatbot Test</h1>
+        <p>This testing page demonstrates the functionality of the Sandex AI hybrid chatbot system operating without relying on the DeepSeek API. The chatbot uses an intelligent keyword-matching algorithm with fallback mechanisms.</p>
         
         <div class="test-buttons">
             <button class="btn" id="toggleChat">Toggle Chat</button>
-            <button class="btn" id="sendTest">Send Test Message</button>
+            <button class="btn" id="testServices">Test AI Services</button>
+            <button class="btn" id="testCybersecurity">Test Cybersecurity</button>
+            <button class="btn" id="testCompany">Test Company Info</button>
+            <button class="btn" id="testArabic">Test Arabic</button>
+            <button class="btn" id="testRandom">Test Random Query</button>
+            <button class="btn" id="toggleDebug">Toggle Debug</button>
         </div>
+        
+        <div class="test-info">
+            <h3>Hybrid Chatbot System Features:</h3>
+            <div class="test-card">
+                <div class="test-case">
+                    <div class="test-case-title">🔍 Advanced Keyword Matching</div>
+                    <p>The system uses sophisticated partial matching to recognize keywords even when they appear within larger contexts or with spelling variations.</p>
+                </div>
+                <div class="test-case">
+                    <div class="test-case-title">🔄 Context-Aware Responses</div>
+                    <p>When a query doesn't match exact keywords, the system analyzes the context to provide the most relevant response from its knowledge base.</p>
+                </div>
+                <div class="test-case">
+                    <div class="test-case-title">🌐 Bilingual Support</div>
+                    <p>The chatbot automatically detects and responds in both English and Arabic based on the user's input language.</p>
+                </div>
+                <div class="test-case">
+                    <div class="test-case-title">🔋 Fallback Mechanisms</div>
+                    <p>Multiple levels of fallbacks ensure users always receive a helpful response, even for queries outside the system's knowledge base.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Debug Panel -->
+    <div id="debugPanel" class="debug-panel">
+        <div id="debugContent"></div>
     </div>
 
     <!-- Floating Chat Button -->
@@ -112,32 +378,263 @@
     <!-- Load Scripts -->
     <script src="js/env.js"></script>
     <script src="js/sandex-hybrid-chatbot.js"></script>
-    <script src="js/chatbot-ui.js"></script>
-    <script>
+    <script src="js/chatbot-ui.js"></script>    <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const toggleBtn = document.getElementById('toggleChat');
-            const sendTestBtn = document.getElementById('sendTest');
+            // Initialize the hybrid chatbot system
+            let sandexBot = new SandexHybridChatbot();
+            let debugMode = false;
             
-            toggleBtn.addEventListener('click', function() {
-                window.toggleChatWindow();
-            });
-            
-            sendTestBtn.addEventListener('click', function() {
-                // First ensure the chat is open
-                const chatInterface = document.getElementById('chatInterface');
-                if (chatInterface.classList.contains('hidden')) {
-                    window.toggleChatWindow();
+            // Debug function
+            function logDebug(message, data) {
+                if (debugMode) {
+                    const debugContent = document.getElementById('debugContent');
+                    const timestamp = new Date().toLocaleTimeString();
+                    debugContent.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+                    
+                    if (data) {
+                        console.log(message, data);
+                    }
+                    
+                    const debugPanel = document.getElementById('debugPanel');
+                    debugPanel.scrollTop = debugPanel.scrollHeight;
                 }
-                
-                // Set a test message and trigger send
-                const chatInput = document.getElementById('chatInput');
-                chatInput.value = "Tell me about Sandex AI services";
-                
-                // Trigger send after a small delay to ensure UI is updated
-                setTimeout(() => {
-                    document.getElementById('sendMessage').click();
-                }, 300);
+            }
+
+            // Chat interface elements
+            const chatInterface = document.getElementById('chatInterface');
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const sendButton = document.getElementById('sendMessage');
+            const floatingBtn = document.getElementById('floatingChatBtn');
+            const closeBtn = document.getElementById('closeChat');
+            
+            // Test button handlers
+            document.getElementById('toggleChat').addEventListener('click', function() {
+                toggleChatWindow();
             });
+            
+            document.getElementById('testServices').addEventListener('click', function() {
+                ensureChatOpen();
+                simulateMessage("Tell me about your AI services");
+            });
+            
+            document.getElementById('testCybersecurity').addEventListener('click', function() {
+                ensureChatOpen();
+                simulateMessage("What cybersecurity solutions do you offer?");
+            });
+            
+            document.getElementById('testCompany').addEventListener('click', function() {
+                ensureChatOpen();
+                simulateMessage("Who is Sandex? Tell me about your company.");
+            });
+            
+            document.getElementById('testArabic').addEventListener('click', function() {
+                ensureChatOpen();
+                simulateMessage("ما هي خدمات الذكاء الاصطناعي التي تقدمونها؟");
+            });
+            
+            document.getElementById('testRandom').addEventListener('click', function() {
+                ensureChatOpen();
+                const randomQueries = [
+                    "How can you help with legacy systems?",
+                    "Do you have experience with government projects?",
+                    "What makes your software development special?",
+                    "I need help with business analytics",
+                    "Can you tell me about your pricing?"
+                ];
+                const randomIndex = Math.floor(Math.random() * randomQueries.length);
+                simulateMessage(randomQueries[randomIndex]);
+            });
+            
+            document.getElementById('toggleDebug').addEventListener('click', function() {
+                debugMode = !debugMode;
+                document.getElementById('debugPanel').style.display = debugMode ? 'block' : 'none';
+                logDebug("Debug mode " + (debugMode ? "enabled" : "disabled"));
+            });
+            
+            // Helper functions
+            function ensureChatOpen() {
+                if (chatInterface.classList.contains('hidden')) {
+                    toggleChatWindow();
+                }
+            }
+            
+            function simulateMessage(text) {
+                chatInput.value = text;
+                
+                // Trigger send after a small delay
+                setTimeout(() => {
+                    sendMessage();
+                }, 300);
+            }
+            
+            // Chat window toggle
+            function toggleChatWindow() {
+                chatInterface.classList.toggle('hidden');
+                floatingBtn.classList.toggle('hidden');
+                
+                if (!chatInterface.classList.contains('hidden')) {
+                    chatInput.focus();
+                    
+                    // Show welcome message if first open
+                    if (chatMessages.children.length === 0) {
+                        setTimeout(() => {
+                            addBotMessage("👋 Hello! I'm Sandex AI Assistant. How can I help you today?");
+                        }, 500);
+                    }
+                }
+            }
+            
+            // Event listeners
+            floatingBtn.addEventListener('click', toggleChatWindow);
+            closeBtn.addEventListener('click', toggleChatWindow);
+            
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            sendButton.addEventListener('click', sendMessage);
+            
+            // Add user message to chat
+            function addUserMessage(text) {
+                const messageElem = document.createElement('div');
+                messageElem.className = 'flex justify-end mb-4';
+                messageElem.innerHTML = `
+                    <div class="bg-gray-700/80 text-white rounded-lg px-4 py-3 max-w-[80%] shadow">
+                        ${text}
+                    </div>
+                `;
+                chatMessages.appendChild(messageElem);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Add bot message to chat
+            function addBotMessage(text) {
+                // Process markdown in text
+                text = formatMarkdown(text);
+                
+                const messageElem = document.createElement('div');
+                messageElem.className = 'flex mb-4';
+                messageElem.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center mr-2">
+                        <i class="fas fa-robot text-orange-400"></i>
+                    </div>
+                    <div class="bg-orange-500/10 rounded-lg px-4 py-3 max-w-[80%] border border-orange-500/30 shadow-md">
+                        ${text}
+                    </div>
+                `;
+                chatMessages.appendChild(messageElem);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Add typing indicator
+            function addTypingIndicator() {
+                const indicator = document.createElement('div');
+                indicator.className = 'flex mb-4 typing-indicator';
+                indicator.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center mr-2">
+                        <i class="fas fa-robot text-orange-400"></i>
+                    </div>
+                    <div class="bg-orange-500/10 rounded-lg px-4 py-3 border border-orange-500/30">
+                        <span class="typing-dot">.</span>
+                        <span class="typing-dot">.</span>
+                        <span class="typing-dot">.</span>
+                    </div>
+                `;
+                chatMessages.appendChild(indicator);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                return indicator;
+            }
+            
+            // Format markdown
+            function formatMarkdown(text) {
+                // Bold text
+                text = text.replace(/\*\*(.*?)\*\*|__(.*?)__/g, '<strong>$1$2</strong>');
+                
+                // Bullet points
+                text = text.replace(/^\s*[•*-]\s+(.*)/gm, '<div class="flex mb-1"><span class="mr-2">•</span><span>$1</span></div>');
+                
+                // Handle emoji emphasis
+                text = text.replace(/([\u{1F300}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}])/gu, '<span class="text-xl mr-1">$1</span>');
+                
+                // Newlines
+                text = text.replace(/\n/g, '<br>');
+                
+                return text;
+            }
+            
+            // Send message function
+            async function sendMessage() {
+                const message = chatInput.value.trim();
+                if (message === '') return;
+                
+                // Add user message
+                addUserMessage(message);
+                chatInput.value = '';
+                
+                // Add typing indicator
+                const typingIndicator = addTypingIndicator();
+                
+                try {
+                    // Log the action
+                    logDebug("Generating response for: " + message);
+                    const startTime = performance.now();
+                    
+                    // Get response from the hybrid system
+                    const result = await sandexBot.generateResponse(message);
+                    const responseTime = performance.now() - startTime;
+                    
+                    // Log the result
+                    logDebug("Response generated", {
+                        source: result.source, 
+                        confidence: result.confidence,
+                        time: responseTime.toFixed(0) + "ms"
+                    });
+                    
+                    // Simulate a natural typing delay based on length
+                    const typingDelay = Math.min(
+                        Math.max(500, result.response.length * 10), 
+                        DEEPSEEK_CONFIG?.SIMULATE_API_LATENCY ? 2000 : 1000
+                    );
+                    
+                    setTimeout(() => {
+                        try {
+                            chatMessages.removeChild(typingIndicator);
+                        } catch (e) {
+                            // Handle case where typing indicator might already be removed
+                        }
+                        
+                        // Add bot response
+                        addBotMessage(result.response);
+                    }, typingDelay);
+                    
+                } catch (error) {
+                    logDebug("Error in chat processing: " + error.message);
+                    console.error(error);
+                    
+                    try {
+                        chatMessages.removeChild(typingIndicator);
+                    } catch (e) {
+                        // Handle case where typing indicator might already be removed
+                    }
+                    
+                    // Use fallback response
+                    const fallbackResponse = sandexBot.getEmergencyFallback(detectLanguage(message));
+                    addBotMessage(fallbackResponse.response);
+                }
+            }
+            
+            // Helper function to detect language
+            function detectLanguage(text) {
+                const arabicPattern = /[\u0600-\u06FF\u0750-\u077F]/;
+                return arabicPattern.test(text) ? 'ar' : 'en';
+            }
+            
+            // Expose global functions for testing
+            window.toggleChatWindow = toggleChatWindow;
+            window.sendTestMessage = simulateMessage;
         });
     </script>
 </body>

@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Failure Recovery Test</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.unified.css">
+    <style>
+        :root {
+            --primary: #EF571B;
+            --secondary: #F3C846;
+            --dark: #121212;
+            --light: #f8fafc;
+            --border: rgba(239, 87, 27, 0.4);
+            --shadow: rgba(239, 87, 27, 0.3);
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Exo 2', sans-serif;
+            color: var(--primary);
+        }
+        
+        .test-panel {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .control-panel, .chat-display {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-display {
+            position: relative;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .switch-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem 0;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border);
+        }
+        
+        .test-input {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border);
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--light);
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--shadow);
+        }
+        
+        .message {
+            margin-bottom: 1.5rem;
+            max-width: 80%;
+        }
+        
+        .message.user-message {
+            margin-left: auto;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 1rem 1rem 0 1rem;
+        }
+        
+        .message.bot-message {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .bot-icon {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+        
+        .bot-content {
+            background-color: rgba(239, 87, 27, 0.15);
+            padding: 1rem;
+            border-radius: 0 1rem 1rem 1rem;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .status-indicator {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .status-indicator i {
+            margin-right: 0.5rem;
+        }
+        
+        .status-online {
+            background-color: rgba(46, 204, 113, 0.2);
+            border: 1px solid rgba(46, 204, 113, 0.5);
+            color: #2ecc71;
+        }
+        
+        .status-offline {
+            background-color: rgba(231, 76, 60, 0.2);
+            border: 1px solid rgba(231, 76, 60, 0.5);
+            color: #e74c3c;
+        }
+        
+        .status-warning {
+            background-color: rgba(243, 156, 18, 0.2);
+            border: 1px solid rgba(243, 156, 18, 0.5);
+            color: #f39c12;
+        }
+        
+        .log-display {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 0.5rem;
+            font-family: monospace;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .log-entry {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .log-time {
+            color: var(--secondary);
+            margin-right: 0.5rem;
+        }
+        
+        .log-info {
+            color: #3498db;
+        }
+        
+        .log-warning {
+            color: #f1c40f;
+        }
+        
+        .log-error {
+            color: #e74c3c;
+        }
+        
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .typing-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            margin: 0 2px;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); }
+            20% { transform: translateY(-4px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sandex AI Hybrid Chatbot - API Failure Recovery Test</h1>
+            <p>This page demonstrates how the chatbot gracefully handles API failures by transitioning to keyword-based responses without users noticing any disruption.</p>
+        </header>
+        
+        <div class="test-panel">
+            <div class="control-panel">
+                <h2>Control Panel</h2>
+                
+                <div class="switch-container">
+                    <span>API Availability:</span>
+                    <label class="switch">
+                        <input type="checkbox" id="apiToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <button class="btn" id="testCategoryBtn">Test Category Match</button>
+                <button class="btn" id="testPartialBtn">Test Partial Match</button>
+                <button class="btn" id="testContextBtn">Test Context Analysis</button>
+                <button class="btn" id="testFallbackBtn">Test Fallback System</button>
+                <button class="btn" id="forceFailBtn">Force API Failure</button>
+                <button class="btn btn-secondary" id="clearBtn">Clear Chat</button>
+                
+                <div class="test-input">
+                    <input type="text" id="customQuery" placeholder="Type a custom query...">
+                    <button class="btn" id="sendBtn">Send</button>
+                </div>
+                
+                <div id="apiStatus" class="status-indicator status-online">
+                    <i class="fas fa-circle"></i> API Status: Online
+                </div>
+                
+                <div class="log-display" id="logDisplay">
+                    <div class="log-entry">
+                        <span class="log-time">[10:24:15]</span>
+                        <span class="log-info">System initialized, API connection active</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-display" id="chatDisplay">
+                <div class="message bot-message">
+                    <div class="bot-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="bot-content">
+                        <p>👋 Welcome to the API Failure Recovery Test! I'm Sandex AI Assistant.</p>
+                        <p>This demo shows how the chatbot transitions seamlessly between API and keyword-based responses when the API becomes unavailable.</p>
+                        <p>Use the controls to test different scenarios or toggle the API availability to see how the system recovers.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/env.js"></script>
+    <script src="js/sandex-hybrid-chatbot.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the chatbot
+            const sandexBot = new SandexHybridChatbot();
+            
+            // Elements
+            const apiToggle = document.getElementById('apiToggle');
+            const apiStatus = document.getElementById('apiStatus');
+            const chatDisplay = document.getElementById('chatDisplay');
+            const logDisplay = document.getElementById('logDisplay');
+            const customQuery = document.getElementById('customQuery');
+            const sendBtn = document.getElementById('sendBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            
+            // Test buttons
+            const testCategoryBtn = document.getElementById('testCategoryBtn');
+            const testPartialBtn = document.getElementById('testPartialBtn');
+            const testContextBtn = document.getElementById('testContextBtn');
+            const testFallbackBtn = document.getElementById('testFallbackBtn');
+            const forceFailBtn = document.getElementById('forceFailBtn');
+            
+            // Variables
+            let apiAvailable = true;
+            let apiFailureCount = 0;
+            const maxApiFailures = 3;
+            
+            // Logging function
+            function addLog(message, type = 'info') {
+                const now = new Date();
+                const time = now.toLocaleTimeString();
+                
+                const logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                logEntry.innerHTML = `<span class="log-time">[${time}]</span><span class="log-${type}">${message}</span>`;
+                
+                logDisplay.appendChild(logEntry);
+                logDisplay.scrollTop = logDisplay.scrollHeight;
+            }
+            
+            // Update API status indicator
+            function updateApiStatus() {
+                if (apiAvailable) {
+                    apiStatus.className = 'status-indicator status-online';
+                    apiStatus.innerHTML = '<i class="fas fa-circle"></i> API Status: Online';
+                } else {
+                    apiStatus.className = 'status-indicator status-offline';
+                    apiStatus.innerHTML = '<i class="fas fa-circle"></i> API Status: Offline';
+                }
+                
+                if (apiAvailable && apiFailureCount > 0) {
+                    apiStatus.className = 'status-indicator status-warning';
+                    apiStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> API Status: Unstable (${apiFailureCount}/${maxApiFailures} failures)`;
+                }
+            }
+            
+            // Toggle API availability
+            apiToggle.addEventListener('change', function() {
+                apiAvailable = this.checked;
+                updateApiStatus();
+                
+                if (apiAvailable) {
+                    addLog('API connection restored', 'info');
+                    apiFailureCount = 0;
+                } else {
+                    addLog('API connection disabled', 'warning');
+                }
+            });
+            
+            // Add a user message to the chat
+            function addUserMessage(text) {
+                const message = document.createElement('div');
+                message.className = 'message user-message';
+                message.textContent = text;
+                
+                chatDisplay.appendChild(message);
+                chatDisplay.scrollTop = chatDisplay.scrollHeight;
+            }
+            
+            // Add a bot message to the chat
+            function addBotMessage(text, source = '') {
+                // Create typing indicator first
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'message bot-message typing-indicator';
+                typingIndicator.innerHTML = `
+                    <div class="bot-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="bot-content">
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                    </div>
+                `;
+                
+                chatDisplay.appendChild(typingIndicator);
+                chatDisplay.scrollTop = chatDisplay.scrollHeight;
+                
+                // Format source label
+                let sourceLabel = '';
+                if (source) {
+                    const sourceColor = source === 'API' ? '#3498db' : 
+                                    source === 'Keyword' ? '#2ecc71' : 
+                                    source === 'Context' ? '#f39c12' : 
+                                    '#e74c3c';
+                    sourceLabel = `<small style="display: inline-block; padding: 2px 6px; background-color: rgba(0,0,0,0.2); border-radius: 4px; margin-top: 8px; color: ${sourceColor}; border: 1px solid ${sourceColor};">Source: ${source}</small>`;
+                }
+                
+                // Calculate typing delay based on text length
+                const typingDelay = Math.min(Math.max(800, text.length * 15), 3000);
+                
+                // Replace typing indicator with actual message after delay
+                setTimeout(() => {
+                    const message = document.createElement('div');
+                    message.className = 'message bot-message';
+                    message.innerHTML = `
+                        <div class="bot-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="bot-content">
+                            ${text}
+                            ${sourceLabel}
+                        </div>
+                    `;
+                    
+                    chatDisplay.replaceChild(message, typingIndicator);
+                    chatDisplay.scrollTop = chatDisplay.scrollHeight;
+                }, typingDelay);
+            }
+            
+            // Simulate API call with potential failures
+            async function simulateApiCall(query) {
+                if (!apiAvailable || (apiFailureCount > 0 && Math.random() < 0.7)) {
+                    // API is unavailable or unstable
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    apiFailureCount++;
+                    addLog(`API request failed (${apiFailureCount}/${maxApiFailures})`, 'error');
+                    
+                    if (apiFailureCount >= maxApiFailures) {
+                        apiAvailable = false;
+                        apiToggle.checked = false;
+                        updateApiStatus();
+                        addLog('API disabled after multiple failures', 'error');
+                    } else {
+                        updateApiStatus();
+                    }
+                    
+                    throw new Error('API request failed');
+                }
+                
+                // Simulate successful API response
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                addLog('API request successful', 'info');
+                
+                // Generate a generic API-like response
+                return {
+                    response: `Thank you for your query about "${query}". As Sandex AI Assistant, I'm here to help with information about our services, projects, and capabilities. For specific details or to discuss your needs further, please contact our team at mharty@sandexai.com or call +20 1000066161.`,
+                    source: 'API',
+                    confidence: 0.85
+                };
+            }
+            
+            // Process message and get response
+            async function processMessage(message) {
+                addLog(`Processing message: ${message}`, 'info');
+                
+                try {
+                    let response;
+                    
+                    // Check if API is available first
+                    if (apiAvailable) {
+                        try {
+                            addLog('Attempting API request', 'info');
+                            response = await simulateApiCall(message);
+                            return response;
+                        } catch (error) {
+                            addLog('Falling back to keyword system', 'warning');
+                        }
+                    }
+                    
+                    // Use the hybrid chatbot system
+                    response = await sandexBot.generateResponse(message);
+                    
+                    // Log the source of the response
+                    if (response.source === 'keyword') {
+                        addLog('Using direct keyword match', 'info');
+                        response.source = 'Keyword';
+                    } else if (response.source === 'context') {
+                        addLog('Using contextual analysis', 'info');
+                        response.source = 'Context';
+                    } else {
+                        addLog('Using fallback response', 'warning');
+                        response.source = 'Fallback';
+                    }
+                    
+                    return response;
+                    
+                } catch (error) {
+                    addLog('Error processing message: ' + error.message, 'error');
+                    return {
+                        response: "I apologize, but I encountered an error processing your request. Please try again or contact our team directly at mharty@sandexai.com.",
+                        source: 'Error',
+                        confidence: 0
+                    };
+                }
+            }
+            
+            // Send message function
+            async function sendMessage(message) {
+                if (!message.trim()) return;
+                
+                addUserMessage(message);
+                const response = await processMessage(message);
+                addBotMessage(response.response, response.source);
+            }
+            
+            // Event listeners
+            sendBtn.addEventListener('click', () => {
+                const message = customQuery.value.trim();
+                if (message) {
+                    sendMessage(message);
+                    customQuery.value = '';
+                }
+            });
+            
+            customQuery.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendBtn.click();
+                }
+            });
+            
+            clearBtn.addEventListener('click', () => {
+                // Clear chat but keep welcome message
+                const welcomeMessage = chatDisplay.firstChild;
+                chatDisplay.innerHTML = '';
+                chatDisplay.appendChild(welcomeMessage);
+            });
+            
+            // Test buttons
+            testCategoryBtn.addEventListener('click', () => {
+                sendMessage('Tell me about your cybersecurity services');
+            });
+            
+            testPartialBtn.addEventListener('click', () => {
+                sendMessage('Do you provide protection against hackers?');
+            });
+            
+            testContextBtn.addEventListener('click', () => {
+                sendMessage('I need information about how you handle digital transformation');
+            });
+            
+            testFallbackBtn.addEventListener('click', () => {
+                sendMessage('What\'s the weather like today in Cairo?');
+            });
+            
+            forceFailBtn.addEventListener('click', () => {
+                if (apiAvailable) {
+                    apiFailureCount = maxApiFailures - 1;
+                    updateApiStatus();
+                    addLog(`API instability simulated (${apiFailureCount}/${maxApiFailures} failures)`, 'warning');
+                    sendMessage('I need help with a project. Are you available?');
+                } else {
+                    addLog('API is already disabled', 'info');
+                }
+            });
+            
+            // Initialize
+            updateApiStatus();
+            addLog('Test environment initialized', 'info');
+        });
+    </script>
+</body>
+</html>
