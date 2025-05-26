@@ -348,13 +348,38 @@ document.addEventListener('DOMContentLoaded', function() {    // Initialize Part
             addMessage(errorMessage, 'ai');
         }
     }
-      // Function to call DeepSeek API
+      // Function to display env.js file error
+    function showEnvFileError() {
+        console.warn("=== CHATBOT CONFIGURATION ERROR ===");
+        console.warn("Missing or invalid env.js file. Please follow these steps:");
+        console.warn("1. Copy the js/env-example.js file to js/env.js");
+        console.warn("2. Open js/env.js and add your DeepSeek API key");
+        console.warn("3. Refresh the page to apply the changes");
+        console.warn("See README.md for more detailed instructions");
+        
+        // Add visual error message in chatbot
+        if (document.getElementById('chatMessages')) {
+            const errorMsg = document.createElement('div');
+            errorMsg.className = 'message error-message';
+            errorMsg.innerHTML = `
+                <div class="message-content bot-content">
+                    <strong>⚠️ Configuration Error:</strong>
+                    <p>The chatbot configuration file (env.js) is missing or invalid.</p>
+                    <p>Please check the browser console for setup instructions.</p>
+                </div>
+            `;
+            document.getElementById('chatMessages').appendChild(errorMsg);
+        }
+    }
+
+    // Function to call DeepSeek API
     async function callDeepSeekAPI(userMessage) {
         try {
             // Check if the DeepSeek configuration exists
             if (typeof DEEPSEEK_CONFIG === 'undefined') {
                 console.error('DeepSeek configuration not found. Please ensure env.js is loaded correctly.');
-                return 'Sorry, there was an issue with the AI configuration. Please try again later.';
+                showEnvFileError();
+                return 'Sorry, there was an issue with the AI configuration. Please check the console for setup instructions.';
             }
             
             // Prepare API request to DeepSeek
