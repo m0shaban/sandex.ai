@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandex AI - Portfolio</title>
+    <link rel="stylesheet" href="css/styles.unified.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Portfolio Styles */
+        .portfolio-section {
+            padding: 4rem 0;
+            background: var(--dark-bg);
+            position: relative;
+            overflow: hidden;
+        }        .feature-card {
+            background: rgba(255, 109, 0, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 1rem;
+            transition: all 0.3s ease;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 109, 0, 0.2);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            color: var(--light-text);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-description {
+            color: var(--light-text);
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .chatbot-demo {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border);
+        }
+
+        .demo-message {
+            background: rgba(255, 109, 0, 0.1);
+            border-radius: 1rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            border: 1px solid var(--border);
+        }
+
+        .demo-message.user {
+            background: rgba(255, 171, 64, 0.1);
+            margin-right: 2rem;
+        }
+
+        .demo-message.bot {
+            background: rgba(255, 109, 0, 0.1);
+            margin-left: 2rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .tech-item {
+            background: rgba(255, 109, 0, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            color: var(--light-text);
+            border: 1px solid var(--border);
+        }
+
+        .highlight-box {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            padding: 2rem;
+            border-radius: 1rem;
+            margin: 2rem 0;
+            color: white;
+            text-align: center;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 109, 0, 0.1);
+            border-radius: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }        .stat-label {
+            color: var(--light-text);
+            opacity: 0.8;
+        }
+          .features-grid {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+        
+        .three-column-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+          @media (max-width: 768px) {
+            .three-column-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .tech-section h3 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--light-text);
+            font-size: 1.3rem;
+        }
+        
+        .tech-section h3:first-child {
+            margin-top: 0;
+        }
+        
+        .contact-info {
+            text-align: center;
+        }
+          .contact-info p {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .demo-section {
+            margin-top: 3rem;
+        }
+        
+        .demo-conversation {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .demo-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            width: 100%;
+        }
+          .highlight-primary {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        /* Comparison Table Styles */
+        .comparison-table-wrapper {
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 1rem;
+            overflow: hidden;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .comparison-table th {
+            background: rgba(255, 109, 0, 0.2);
+            color: var(--light-text);
+            font-weight: 600;
+        }
+        
+        .comparison-table tr:hover {
+            background: rgba(255, 109, 0, 0.1);
+        }
+        
+        .comparison-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .comparison-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        .feature-available {
+            color: var(--success);
+        }
+        
+        .feature-partial {
+            color: var(--warning);
+        }
+        
+        .feature-unavailable {
+            color: var(--error);
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-progress"></div>    <header class="glass-nav">
+        <nav>
+            <div class="logo">
+                <img src="images/sandex-logo-icon.png" alt="Sandex AI Logo">
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#chatbot">Chatbot</a>
+                <a href="#tech">Technologies</a>
+                <a href="#contact">Contact Us</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>        <section id="hero" class="portfolio-section">
+            <div class="container">
+                <h1 class="glitch-text">Sandex AI Portfolio</h1>
+                <p class="subtitle">Modern Integrated Design with Intelligent Chatbot</p>
+                
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Responsive</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Support</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Features</div>
+                    </div>
+                </div>
+            </div>
+        </section>        <section id="features" class="portfolio-section">
+            <div class="container">
+                <h2>Template Features</h2>
+                <div class="grid features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-paint-brush feature-icon"></i>
+                        <h3 class="feature-title">Modern Design</h3>
+                        <p class="feature-description">
+                            Attractive contemporary design with advanced animations and high interactivity
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-mobile-alt feature-icon"></i>
+                        <h3 class="feature-title">Fully Responsive</h3>
+                        <p class="feature-description">
+                            Works perfectly on all devices and screen sizes with optimized layouts
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-tachometer-alt feature-icon"></i>
+                        <h3 class="feature-title">High Performance</h3>
+                        <p class="feature-description">
+                            Fast loading times and exceptional performance with SEO optimization
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-palette feature-icon"></i>
+                        <h3 class="feature-title">Customizable Interface</h3>
+                        <p class="feature-description">
+                            Easily customize colors, themes, and layout to match your brand identity
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-code feature-icon"></i>
+                        <h3 class="feature-title">Clean Code</h3>
+                        <p class="feature-description">
+                            Well-structured and documented code for easy maintenance and customization
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt feature-icon"></i>
+                        <h3 class="feature-title">Security Focused</h3>
+                        <p class="feature-description">
+                            Implements best security practices to protect your data and users
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>        <section id="chatbot" class="portfolio-section">
+            <div class="container">
+                <h2>Advanced Chatbot Features</h2>
+                
+                <!-- Main Features Section -->
+                <div class="grid features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-brain feature-icon"></i>
+                        <h3 class="feature-title">Advanced AI</h3>
+                        <p class="feature-description">
+                            • DeepSeek AI integration for intelligent responses<br>
+                            • Conversation context analysis<br>
+                            • Advanced natural language understanding<br>
+                            • Continuous learning from interactions
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-language feature-icon"></i>
+                        <h3 class="feature-title">Multilingual Support</h3>
+                        <p class="feature-description">
+                            • Support for English and Arabic languages<br>
+                            • Real-time message translation<br>
+                            • Dialect adaptation capabilities<br>
+                            • Emoji and symbol support
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-paint-brush feature-icon"></i>
+                        <h3 class="feature-title">Advanced UI</h3>
+                        <p class="feature-description">
+                            • Modern attractive design<br>
+                            • Smooth animations and transitions<br>
+                            • Advanced text formatting<br>
+                            • Multimedia support
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Interactive Features Section -->
+                <div class="highlight-box">
+                    <h3>Advanced Interaction Features</h3>
+                    <div class="grid three-column-grid">
+                        <div class="feature-item">
+                            <i class="fas fa-comments"></i>
+                            <h4>Smart Responses</h4>
+                            <p>Advanced question analysis with accurate and context-aware answers</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-clock"></i>
+                            <h4>Rapid Response</h4>
+                            <p>Instant replies with animated typing effects for a natural feel</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-history"></i>
+                            <h4>Conversation Memory</h4>
+                            <p>Remembers conversation history and maintains context across sessions</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customization Section -->
+                <div class="chatbot-demo">
+                    <h3>Customization Options</h3>
+                    <div class="grid features-grid">
+                        <div class="customization-item">
+                            <i class="fas fa-palette"></i>
+                            <h4>Appearance Customization</h4>
+                            <ul>
+                                <li>Change colors and themes</li>
+                                <li>Customize fonts and sizes</li>
+                                <li>Add logos and images</li>
+                                <li>Modify animation effects</li>
+                            </ul>
+                        </div>
+                        <div class="customization-item">
+                            <i class="fas fa-cogs"></i>
+                            <h4>Advanced Settings</h4>
+                            <ul>
+                                <li>Customize automated responses</li>
+                                <li>Set up business rules</li>
+                                <li>Define response times</li>
+                                <li>Manage users and permissions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security and Performance Section -->
+                <div class="security-section">
+                    <h3>Security & Performance</h3>
+                    <div class="grid features-grid">
+                        <div class="security-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <h4>Advanced Security</h4>
+                            <p>• Data encryption<br>
+                               • Protection against attacks<br>
+                               • Identity verification<br>
+                               • Automatic backups</p>
+                        </div>
+                        <div class="security-item">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <h4>High Performance</h4>
+                            <p>• Rapid response time<br>
+                               • Instant loading<br>
+                               • Resource optimization<br>
+                               • Multi-user support</p>
+                        </div>
+                    </div>
+                </div>                <!-- Integration Section -->
+                <div class="integration-section">
+                    <h3>Integration Capabilities</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item">API Integration</span>
+                        <span class="tech-item">Webhooks</span>
+                        <span class="tech-item">CRM Systems</span>
+                        <span class="tech-item">Analytics</span>
+                        <span class="tech-item">Social Media</span>
+                        <span class="tech-item">Custom Apps</span>
+                    </div>
+                </div>
+                  <!-- Demo Conversation Section -->
+                <div class="chatbot-demo demo-section">
+                    <h3>Demo Conversation</h3>
+                    <div class="demo-conversation">
+                        <div class="demo-message bot">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-text">Hello! I'm Sandex AI Assistant. How can I help you today?</div>
+                                <div class="message-time">10:05 AM</div>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-message user">
+                            <div class="message-content">
+                                <div class="message-text">Can you tell me more about your template customization options?</div>
+                                <div class="message-time">10:06 AM</div>
+                            </div>
+                            <div class="message-avatar user-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-message bot">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-text">Of course! Our template offers extensive customization options:<br><br>
+                                1. <span class="highlight-primary">Visual Customization</span>: Change colors, fonts, layouts, and animations<br>
+                                2. <span class="highlight-primary">Behavioral Settings</span>: Adjust response speed, typing effects, and conversation flows<br>
+                                3. <span class="highlight-primary">AI Configuration</span>: Train the bot on your specific content and tune its personality<br>
+                                4. <span class="highlight-primary">Integration Options</span>: Connect with your existing systems via our API<br><br>
+                                Would you like more details on any specific aspect?</div>
+                                <div class="message-time">10:07 AM</div>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-message user">
+                            <div class="message-content">
+                                <div class="message-text">That's great! How advanced is the AI? Can it handle complex conversations?</div>
+                                <div class="message-time">10:08 AM</div>
+                            </div>
+                            <div class="message-avatar user-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-message bot">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-text">Absolutely! Our AI is powered by DeepSeek technology with advanced capabilities:<br><br>
+                                • Maintains context throughout extended conversations<br>
+                                • Understands and responds to complex multi-part questions<br>
+                                • Learns from interactions to improve over time<br>
+                                • Handles nuanced language with sentiment analysis<br>
+                                • Supports multilingual conversations with real-time translation<br><br>
+                                The system is designed to provide human-like interactions while maintaining consistency across topics.</div>
+                                <div class="message-time">10:09 AM</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>        <!-- Feature Comparison Section -->
+        <section class="portfolio-section">
+            <div class="container">
+                <h2>Feature Comparison</h2>
+                <div class="comparison-table-wrapper">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Sandex AI</th>
+                                <th>Basic Templates</th>
+                                <th>Competitors</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Advanced AI Integration</td>
+                                <td><i class="fas fa-check-circle feature-available"></i></td>
+                                <td><i class="fas fa-times-circle feature-unavailable"></i></td>
+                                <td><i class="fas fa-check-circle feature-available"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Multilingual Support</td>
+                                <td><i class="fas fa-check-circle feature-available"></i></td>
+                                <td><i class="fas fa-times-circle feature-unavailable"></i></td>
+                                <td><i class="fas fa-check-circle feature-partial"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Context Awareness</td>
+                                <td><i class="fas fa-check-circle feature-available"></i></td>
+                                <td><i class="fas fa-times-circle feature-unavailable"></i></td>
+                                <td><i class="fas fa-check-circle feature-partial"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Responsive Design</td>
+                                <td><i class="fas fa-check-circle feature-available"></i></td>
+                                <td><i class="fas fa-check-circle feature-available"></i></td>
+                                <td><i class="fas fa-check-circle feature-available"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Custom Styling</td>
+                                <td><i class="fas fa-check-circle feature-available"></i></td>
+                                <td><i class="fas fa-check-circle feature-partial"></i></td>
+                                <td><i class="fas fa-check-circle feature-available"></i></td>
+                            </tr>
+                            <tr>
+                                <td>API Integration</td>
+                                <td><i class="fas fa-check-circle feature-available"></i></td>
+                                <td><i class="fas fa-times-circle feature-unavailable"></i></td>
+                                <td><i class="fas fa-check-circle feature-available"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Data Analytics</td>
+                                <td><i class="fas fa-check-circle feature-available"></i></td>
+                                <td><i class="fas fa-times-circle feature-unavailable"></i></td>
+                                <td><i class="fas fa-check-circle feature-partial"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Advanced Animations</td>
+                                <td><i class="fas fa-check-circle feature-available"></i></td>
+                                <td><i class="fas fa-times-circle feature-unavailable"></i></td>
+                                <td><i class="fas fa-check-circle feature-partial"></i></td>
+                            </tr>
+                            <tr>
+                                <td>24/7 Support</td>
+                                <td><i class="fas fa-check-circle feature-available"></i></td>
+                                <td><i class="fas fa-times-circle feature-unavailable"></i></td>
+                                <td><i class="fas fa-check-circle feature-partial"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        
+        <section id="tech" class="portfolio-section">
+            <div class="container">
+                <h2>Technologies Used</h2>
+                <div class="tech-section">
+                    <h3>Frontend Technologies</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item">HTML5</span>
+                        <span class="tech-item">CSS3</span>
+                        <span class="tech-item">JavaScript</span>
+                        <span class="tech-item">GSAP</span>
+                        <span class="tech-item">Particles.js</span>
+                        <span class="tech-item">Responsive Design</span>
+                    </div>
+                    
+                    <h3>AI Integration</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item">DeepSeek AI</span>
+                        <span class="tech-item">NLP Processing</span>
+                        <span class="tech-item">Context Analysis</span>
+                        <span class="tech-item">Sentiment Analysis</span>
+                        <span class="tech-item">Machine Learning</span>
+                    </div>
+                    
+                    <h3>Performance & Security</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item">Optimized Assets</span>
+                        <span class="tech-item">Data Encryption</span>
+                        <span class="tech-item">SEO Best Practices</span>
+                        <span class="tech-item">Cross-Browser Support</span>
+                    </div>
+                </div>
+            </div>
+        </section>        <!-- Testimonials Section -->
+        <section class="portfolio-section">
+            <div class="container">
+                <h2>Client Testimonials</h2>
+                <div class="testimonials-container">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <i class="fas fa-quote-left testimonial-quote"></i>
+                            <p>Implementing Sandex AI on our website increased customer engagement by 45% and reduced support inquiries by 30%. The AI's ability to understand complex queries impressed our team and customers alike.</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="testimonial-info">
+                                <h4>John Mitchell</h4>
+                                <p>CTO, TechSolutions Inc.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <i class="fas fa-quote-left testimonial-quote"></i>
+                            <p>The customization options exceeded our expectations. We were able to perfectly match our brand aesthetic while maintaining the advanced functionality. Our customers frequently comment on how intuitive the interface is.</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="testimonial-info">
+                                <h4>Sarah Johnson</h4>
+                                <p>Marketing Director, Global Retail</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <i class="fas fa-quote-left testimonial-quote"></i>
+                            <p>The multilingual support has been a game-changer for our international business. Being able to serve customers in their native language without maintaining separate systems has streamlined our operations considerably.</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="testimonial-info">
+                                <h4>Ahmed Hassan</h4>
+                                <p>CEO, International Trade Co.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="portfolio-section">
+            <div class="container">
+                <h2>Contact Us</h2>
+                <div class="contact-info">
+                    <p>For a copy of the template or more information about our services</p>
+                    <a href="mailto:contact@sandex.ai" class="cyber-button">
+                        <span>Contact Us</span>
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="glass-footer">
+        <div class="container">
+            <p>&copy; 2024 Sandex AI. All Rights Reserved</p>
+        </div>
+    </footer><button class="scroll-to-top" title="Scroll to top" aria-label="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="js/script.js"></script>
+</body>
+</html> 

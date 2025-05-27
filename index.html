@@ -72,7 +72,7 @@
     <header class="fixed top-0 left-0 right-0 z-50 py-4 px-4 md:px-12 backdrop-blur-md bg-gray-900/80 border-b border-orange-500/20 transition-all duration-300">
         <div class="container mx-auto flex justify-between items-center">
             <!-- Logo -->
-            <a href="#home" class="no-underline flex items-center logo-container">
+            <a href="#home" class="no-underline flex items-center" style="line-height: 0;">
                 <img src="images/sandex-logo-full.png" alt="Sandex AI Logo" class="h-14 object-contain">
                 <span class="logo-ai neon-glow font-exo font-bold text-orange-400 text-4xl tracking-tight align-middle ml-[-0.75rem]">.AI</span>
             </a>
@@ -118,7 +118,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                     <div class="animate-on-scroll">
                         <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 font-exo leading-tight">
-                            <span class="gradient-text neon-flicker">Sandex AI for Integrated Solutions</span>
+                            <span class="gradient-text neon-flicker">Sandex AI  Integrated Solutions</span>
                             <span class="block text-light mt-2">The Future of Digital Transformation and Artificial Intelligence</span>
                         </h1>
                         <p class="text-gray-400 text-base sm:text-lg mb-6 sm:mb-8">Your Partner in Digital Transformation and AI Innovation.</p>
@@ -480,7 +480,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- Company Info -->
                 <div class="space-y-4">
-                    <div class="flex items-center logo-container">
+                    <div class="flex items-center" style="line-height: 0;">
                         <img src="images/sandex-logo-full.png" alt="Sandex AI Logo" class="h-12 object-contain">
                         <span class="logo-ai neon-glow font-exo font-bold text-orange-400 text-2xl tracking-tight align-middle ml-[-0.5rem]">.AI</span>
                     </div>
@@ -488,17 +488,14 @@
                         Your Partner in Digital Transformation and AI Innovation. We provide comprehensive technology solutions to help organizations thrive in the digital age.
                     </p>
                     <div class="flex space-x-4">
-                        <a href="https://twitter.com/sandexai" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-orange-400 transition-colors" title="Follow Sandex AI on Twitter">
+                        <a href="https://twitter.com/sandexai" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-orange-400 transition-colors">
                             <i class="fab fa-twitter text-xl"></i>
-                            <span class="sr-only">Follow Sandex AI on Twitter</span>
                         </a>
-                        <a href="https://linkedin.com/company/sandexai" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-orange-400 transition-colors" title="Connect with Sandex AI on LinkedIn">
+                        <a href="https://linkedin.com/company/sandexai" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-orange-400 transition-colors">
                             <i class="fab fa-linkedin text-xl"></i>
-                            <span class="sr-only">Connect with Sandex AI on LinkedIn</span>
                         </a>
-                        <a href="https://facebook.com/sandexai" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-orange-400 transition-colors" title="Like Sandex AI on Facebook">
+                        <a href="https://facebook.com/sandexai" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-orange-400 transition-colors">
                             <i class="fab fa-facebook text-xl"></i>
-                            <span class="sr-only">Like Sandex AI on Facebook</span>
                         </a>
                     </div>
                 </div>
@@ -561,15 +558,15 @@
         </div>
     </footer>    <!-- AI Chat Interface (Hidden by default, modernized) -->    
     <div id="chatInterface" class="fixed bottom-0 right-0 z-50 w-full max-w-md hidden">
-        <div class="chat-container holographic-card p-6 rounded-t-3xl mx-4 shadow-2xl chat-elements-container">
+        <div class="chat-container holographic-card p-6 rounded-t-3xl mx-4 shadow-2xl" style="background: var(--chatbot-bg-dark); border: 1.5px solid var(--chatbot-border);">
             <div class="flex justify-between items-center mb-6">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center shadow-lg pulse-soft bg-gradient-chat">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center shadow-lg pulse-soft" style="background: linear-gradient(135deg, var(--chatbot-primary), var(--chatbot-secondary));">
                         <i class="fas fa-robot text-white text-xl"></i>
                     </div>
-                    <h3 class="font-exo font-bold text-xl tracking-tight chat-title">Sandex AI Assistant</h3>
+                    <h3 class="font-exo font-bold text-xl tracking-tight" style="color: var(--chatbot-primary);">Sandex AI Assistant</h3>
                 </div>
-                <button id="closeChat" aria-label="Close Chat" title="Close chat window" class="w-10 h-10 flex items-center justify-center transition-all rounded-full shadow-md chat-close-btn">
+                <button id="closeChat" aria-label="Close Chat" title="Close chat window" class="w-10 h-10 flex items-center justify-center transition-all rounded-full shadow-md" style="color: #bdbdbd; background: rgba(30,30,30,0.6); border: none;" onmouseover="this.style.color='var(--chatbot-primary)'" onmouseout="this.style.color='#bdbdbd'">
                     <i class="fas fa-times text-lg"></i>
                 </button>
             </div>
@@ -577,8 +574,8 @@
                 <!-- Messages will be added here dynamically -->
             </div>
             <div class="chat-input flex gap-2">
-                <input id="chatInput" type="text" placeholder="Type your message..." class="flex-1 px-4 py-3 rounded-2xl text-light outline-none transition-all text-base shadow-inner font-exo chat-input-field">
-                <button id="sendMessage" aria-label="Send Message" title="Send message" class="px-5 py-3 rounded-2xl text-white font-bold transition-all duration-300 glow-hover shadow-lg flex items-center justify-center text-lg chat-send-button">
+                <input id="chatInput" type="text" placeholder="Type your message..." class="flex-1 px-4 py-3 rounded-2xl text-light outline-none transition-all text-base shadow-inner font-exo" style="background: rgba(30,30,30,0.7); border: 1px solid var(--chatbot-border); color: var(--light-text);">
+                <button id="sendMessage" aria-label="Send Message" title="Send message" class="px-5 py-3 rounded-2xl text-white font-bold transition-all duration-300 glow-hover shadow-lg flex items-center justify-center text-lg" style="background-image: linear-gradient(to right, var(--chatbot-primary), var(--chatbot-secondary));">
                     <i class="fas fa-paper-plane"></i>
                 </button>
             </div>

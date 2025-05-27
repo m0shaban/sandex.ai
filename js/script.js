@@ -326,183 +326,75 @@ document.addEventListener('DOMContentLoaded', function() {    // Initialize Part
         `;
         chatMessages.appendChild(typingIndicator);
         chatMessages.scrollTop = chatMessages.scrollHeight;
-        
-        try {
-            // Initialize the hybrid chatbot system if not already done
-            if (!window.sandexChatbot) {
-                window.sandexChatbot = new SandexHybridChatbot();
-                window.chatAnalytics = new ChatbotAnalytics();
-            }
+          try {
+            // DeepSeek API integration
+            const response = await callDeepSeekAPI(message);
             
-            // Get response using the hybrid system
-            const startTime = performance.now();
-            const result = await window.sandexChatbot.generateResponse(message);
-            const responseTime = performance.now() - startTime;
+            // Remove typing indicator
+            chatMessages.removeChild(typingIndicator);
             
-            // Log the query for analytics
-            window.chatAnalytics.logQuery(result, responseTime);
-            
-            // Remove typing indicator with a slight delay to simulate thinking
-            setTimeout(() => {
-                try {
-                    chatMessages.removeChild(typingIndicator);
-                } catch (e) {
-                    // Handle case where typing indicator might already be removed
-                    console.log('Typing indicator already removed');
-                }
-                
-                // Add AI response
-                addMessage(result.response, 'ai');
-                
-                // Show source in console for debugging
-                console.log(`🤖 Response source: ${result.source}, confidence: ${result.confidence}, time: ${responseTime.toFixed(0)}ms`);
-            }, Math.random() * 500 + 300); // Random delay between 300-800ms for natural effect
+            // Add AI response
+            addMessage(response, 'ai');
             
         } catch (error) {
-            console.error('Error in chat processing:', error);
+            console.error('Error communicating with DeepSeek API:', error);
+            chatMessages.removeChild(typingIndicator);
             
-            try {
-                chatMessages.removeChild(typingIndicator);
-            } catch (e) {
-                // Handle case where typing indicator might already be removed
-            }
-            
-            // Check if the config is missing and show appropriate message
-            if (typeof DEEPSEEK_CONFIG === 'undefined') {
-                showEnvFileError();
-                addMessage('I seem to be having technical difficulties. Please try again or contact our team directly at mharty@sandexai.com.', 'ai');
-            } else {
-                // Use fallback response from the hybrid system
-                const fallbackResponse = window.sandexChatbot?.getEmergencyFallback(detectLanguage(message)) || {
-                    response: 'I apologize for the inconvenience. Please try again or contact our team at mharty@sandexai.com for immediate assistance.'
-                };
+            // Show a more user-friendly error message
+            const errorMessage = error.message && error.message.includes('API key') 
+                ? 'There seems to be an issue with the AI service authentication. Please contact the administrator.'
+                : 'Sorry, I encountered an error while processing your request. Please try again later.';
                 
-                addMessage(fallbackResponse.response, 'ai');
-            }
+            addMessage(errorMessage, 'ai');
         }
     }
-    
-    // Helper function to detect language
-    function detectLanguage(text) {
-        // Simple Arabic detection
-        const arabicPattern = /[\u0600-\u06FF\u0750-\u077F]/;
-        return arabicPattern.test(text) ? 'ar' : 'en';
-    }
-      // Function to display env.js file error
-    function showEnvFileError() {
-        console.warn("=== CHATBOT CONFIGURATION ERROR ===");
-        console.warn("Missing or invalid env.js file. Please follow these steps:");
-        console.warn("1. Copy the js/env-example.js file to js/env.js");
-        console.warn("2. Open js/env.js and add your DeepSeek API key");
-        console.warn("3. Refresh the page to apply the changes");
-        console.warn("See README.md for more detailed instructions");
-        
-        // Add visual error message in chatbot
-        if (document.getElementById('chatMessages')) {
-            const errorMsg = document.createElement('div');
-            errorMsg.className = 'message error-message';
-            errorMsg.innerHTML = `
-                <div class="message-content bot-content">
-                    <strong>⚠️ Configuration Error:</strong>
-                    <p>The chatbot configuration file (env.js) is missing or invalid.</p>
-                    <p>Please check the browser console for setup instructions.</p>
-                </div>
-            `;
-            document.getElementById('chatMessages').appendChild(errorMsg);
-        }
-    }
-
-    // Function to call DeepSeek API
+      // Function to call DeepSeek API
     async function callDeepSeekAPI(userMessage) {
         try {
-            // Check if we have a hybrid chatbot system available
-            if (window.sandexChatbot) {
-                // Use the enhanced hybrid system that has sophisticated fallback
-                const result = await window.sandexChatbot.generateResponse(userMessage);
-                return result.response;
-            }
-            
-            // Traditional API approach as fallback if hybrid system isn't available
-            
             // Check if the DeepSeek configuration exists
             if (typeof DEEPSEEK_CONFIG === 'undefined') {
                 console.error('DeepSeek configuration not found. Please ensure env.js is loaded correctly.');
-                showEnvFileError();
-                return 'Sorry, there was an issue with the AI configuration. Please check the console for setup instructions.';
+                return 'Sorry, there was an issue with the AI configuration. Please try again later.';
             }
             
-            // Attempt to use DeepSeek API
-            try {
-                // Prepare API request to DeepSeek
-                const response = await fetch(DEEPSEEK_CONFIG.API_ENDPOINT, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${DEEPSEEK_CONFIG.API_KEY}`
-                    },
-                    body: JSON.stringify({
-                        model: DEEPSEEK_CONFIG.MODEL,
-                        messages: [
-                            {
-                                role: "system",
-                                content: "You are a helpful and engaging AI assistant for Sandex for Artificial Intelligence and Digital Transformation. Your personality is friendly, professional, and occasionally witty. Customize your responses based on the query type:\n\n1. For simple questions: Provide brief, direct answers (1-2 sentences)\n2. For complex technical questions: Offer detailed, structured explanations with bullet points where helpful\n3. For inquiries about services: Highlight relevant Sandex AI offerings with clear benefits\n\nYou provide information about Sandex AI services, including artificial intelligence solutions, digital transformation, technology training, cybersecurity, custom software development, and system testing. When uncertain, suggest contacting Sandex directly for more information. Use professional but conversational language that reflects the futuristic and innovative nature of Sandex."
-                            },
-                            {
-                                role: "user",
-                                content: userMessage
-                            }
-                        ],
-                        max_tokens: DEEPSEEK_CONFIG.MAX_TOKENS || 1000,
-                        temperature: DEEPSEEK_CONFIG.TEMPERATURE || 0.7
-                    })
-                });
-                
-                // Parse the API response
-                const data = await response.json();
-                
-                // Handle errors
-                if (!response.ok) {
-                    console.error('DeepSeek API error:', data);
-                    throw new Error(`API Error: ${data.error?.message || 'Unknown error'}`);
-                }
-                
-                // Return the AI's response
-                return data.choices[0].message.content;
-                
-            } catch (apiError) {
-                console.error('DeepSeek API error:', apiError);
-                
-                // Use fallback from database if we can detect language
-                const language = detectLanguage(userMessage);
-                
-                // Select a diplomatic fallback response
-                const fallbackResponses = {
-                    en: [
-                        "I'm searching through our knowledge base for that information. In the meantime, you can reach our team directly at mharty@sandexai.com or +20 1000066161 for immediate assistance with any AI solutions, cybersecurity, or software development needs.",
-                        "Thank you for your question. Our team would be best positioned to provide you with detailed information on this topic. Please contact Mohamed Elharty at +20 1000066161 or email mharty@sandexai.com for a comprehensive consultation.",
-                        "I'd be happy to connect you with our specialists who can provide more detailed information on this topic. You can reach our team at mharty@sandexai.com or call +20 1000066161 for personalized assistance."
+            // Prepare API request to DeepSeek
+            const response = await fetch(DEEPSEEK_CONFIG.API_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${DEEPSEEK_CONFIG.API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: DEEPSEEK_CONFIG.MODEL,                    messages: [
+                        {
+                            role: "system",
+                            content: "You are a helpful and engaging AI assistant for Sandex for Artificial Intelligence and Digital Transformation. Your personality is friendly, professional, and occasionally witty. Customize your responses based on the query type:\n\n1. For simple questions: Provide brief, direct answers (1-2 sentences)\n2. For complex technical questions: Offer detailed, structured explanations with bullet points where helpful\n3. For inquiries about services: Highlight relevant Sandex AI offerings with clear benefits\n\nYou provide information about Sandex AI services, including artificial intelligence solutions, digital transformation, technology training, cybersecurity, custom software development, and system testing. When uncertain, suggest contacting Sandex directly for more information. Use professional but conversational language that reflects the futuristic and innovative nature of Sandex."
+                        },
+                        {
+                            role: "user",
+                            content: userMessage
+                        }
                     ],
-                    ar: [
-                        "أبحث في قاعدة معرفتنا عن هذه المعلومات. في غضون ذلك، يمكنك التواصل مع فريقنا مباشرةً على mharty@sandexai.com أو +20 1000066161 للحصول على مساعدة فورية بخصوص أي حلول للذكاء الاصطناعي أو الأمن السيبراني أو تطوير البرمجيات.",
-                        "شكرًا على سؤالك. فريقنا في أفضل وضع لتزويدك بمعلومات مفصلة حول هذا الموضوع. يرجى الاتصال بمحمد الحارثي على +20 1000066161 أو البريد الإلكتروني mharty@sandexai.com للحصول على استشارة شاملة.",
-                        "يسعدني توصيلك بالمتخصصين لدينا الذين يمكنهم تقديم معلومات أكثر تفصيلاً حول هذا الموضوع. يمكنك التواصل مع فريقنا على mharty@sandexai.com أو الاتصال بالرقم +20 1000066161 للحصول على مساعدة شخصية."
-                    ]
-                };
-                
-                const responses = fallbackResponses[language] || fallbackResponses.en;
-                return responses[Math.floor(Math.random() * responses.length)];
+                    max_tokens: DEEPSEEK_CONFIG.MAX_TOKENS,
+                    temperature: DEEPSEEK_CONFIG.TEMPERATURE
+                })
+            });
+            
+            // Parse the API response
+            const data = await response.json();
+            
+            // Handle errors
+            if (!response.ok) {
+                console.error('DeepSeek API error:', data);
+                return `Sorry, there was an error with the AI service. (${data.error?.message || 'Unknown error'})`;
             }
+            
+            // Return the AI's response
+            return data.choices[0].message.content;
             
         } catch (error) {
-            console.error('General chat processing error:', error);
-            
-            // Final fallback for any unexpected errors
-            const language = detectLanguage(userMessage);
-            if (language === 'ar') {
-                return 'عذراً، واجهت خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى أو التواصل مع فريقنا على mharty@sandexai.com للحصول على مساعدة فورية.';
-            } else {
-                return 'Sorry, I encountered an error while processing your request. Please try again or contact our team at mharty@sandexai.com for immediate assistance.';
-            }
+            console.error('DeepSeek API error:', error);
+            return 'Sorry, I encountered an error while processing your request. Please try again later.';
         }
     }
       // Event listeners for chat
@@ -784,4 +676,89 @@ document.addEventListener('DOMContentLoaded', function() {    // Initialize Part
         window.addEventListener('resize', handleResize);
 
     })();
+
+    // Scroll Progress and Section Navigation
+    function initializeScrollFeatures() {
+        // Scroll Progress
+        const progressBar = document.querySelector('.scroll-progress');
+        if (progressBar) {
+            window.addEventListener('scroll', () => {
+                const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (window.scrollY / windowHeight) * 100;
+                progressBar.style.transform = `scaleX(${scrolled / 100})`;
+            });
+        }
+
+        // Scroll to Top Button
+        const scrollTopBtn = document.querySelector('.scroll-to-top');
+        if (scrollTopBtn) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 500) {
+                    scrollTopBtn.classList.add('visible');
+                } else {
+                    scrollTopBtn.classList.remove('visible');
+                }
+            });
+
+            scrollTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // Section Navigation
+        const sections = document.querySelectorAll('section[id]');
+        const navDots = document.querySelectorAll('.section-dot');
+
+        if (sections.length && navDots.length) {
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.scrollY >= (sectionTop - sectionHeight / 3)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navDots.forEach(dot => {
+                    dot.classList.remove('active');
+                    if (dot.getAttribute('data-section') === current) {
+                        dot.classList.add('active');
+                    }
+                });
+            });
+
+            navDots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const sectionId = dot.getAttribute('data-section');
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        section.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        }
+    }
+
+    // Initialize scroll features after DOM is loaded
+    initializeScrollFeatures();
+
+    // Initialize Intersection Observer for sections
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+
+    // Observe all sections
+    document.querySelectorAll('.section').forEach(section => {
+        observer.observe(section);
+    });
 });
