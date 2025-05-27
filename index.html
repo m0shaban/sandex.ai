@@ -55,6 +55,45 @@
     <script>
         document.documentElement.classList.add('dark-theme');
     </script>
+    <script>
+    // ===== Header Hide/Show on Scroll =====
+    (function() {
+        const header = document.querySelector('header');
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+        let isHidden = false;
+
+        function onScroll() {
+            const currentScrollY = window.scrollY;
+            if (currentScrollY > lastScrollY && currentScrollY > 80) {
+                // Scrolling down, hide header
+                if (!isHidden) {
+                    header.style.transform = 'translateY(-100%)';
+                    header.style.transition = 'transform 0.4s cubic-bezier(0.4,0,0.2,1)';
+                    isHidden = true;
+                }
+            } else {
+                // Scrolling up or near top, show header
+                if (isHidden || currentScrollY < 10) {
+                    header.style.transform = 'translateY(0)';
+                    header.style.transition = 'transform 0.4s cubic-bezier(0.4,0,0.2,1)';
+                    isHidden = false;
+                }
+            }
+            lastScrollY = currentScrollY;
+            ticking = false;
+        }
+
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(onScroll);
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', requestTick);
+    })();
+    </script>
 </head>
 <body class="font-roboto">    <!-- Background Effects Container -->
     <div class="effects-container">
