@@ -906,16 +906,7 @@ h1, h2, h3, h4, h5, h6, .font-exo {
   }
 }
 
-/* Define CSS variable for header height */
-header {
-    --header-height: 64px; /* Default height, adjust if needed */
-}
-
-@media (min-width: 768px) {
-    header {
-        --header-height: 72px; /* Adjust header height for larger screens */
-    }
-}
+/* Header variable removed */
 
 .font-roboto {
   font-family: 'Roboto', sans-serif;

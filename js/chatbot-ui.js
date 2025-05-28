@@ -391,49 +391,40 @@
     async function processUserQuery(userInput) {
         try {
             console.log('Processing user query:', userInput);
-            // قياس وقت الاستجابة
             const startTime = Date.now();
-            
-            // إظهار مؤشر الكتابة
             showTypingIndicator();
-            
-            // Check if sandexBot is properly initialized
             if (!sandexBot || typeof sandexBot.generateResponse !== 'function') {
                 console.error('SandexBot not properly initialized or missing generateResponse method');
-                
-                // Try to reinitialize
                 if (typeof SandexHybridChatbot === 'function') {
                     console.log('Attempting to reinitialize SandexBot');
                     sandexBot = new SandexHybridChatbot();
                 }
-                
                 if (!sandexBot || typeof sandexBot.generateResponse !== 'function') {
                     throw new Error('Chat system not initialized properly');
                 }
             }
-            
             try {
-                // الحصول على الرد من نظام الشات بوت
-                console.log('Calling sandexBot.generateResponse');
                 const result = await sandexBot.generateResponse(userInput);
-                console.log('Response received:', result);
-                
-                // إخفاء مؤشر الكتابة
                 hideTypingIndicator();
-                
-                // Check if the response has the expected structure
                 if (!result || typeof result !== 'object' || !result.response) {
                     console.error('Invalid response format:', result);
                     throw new Error('Invalid response format');
                 }
-                
-                // عرض رد البوت
-                displayBotMessage(result.response);
-                
-                // حساب وقت الاستجابة
+                // Detect if we should show contact link (fallback, emergency, or contact intent)
+                let showContact = false;
+                let isFallback = false;
+                if (result.source && (result.source.toLowerCase().includes('fallback') || result.source.toLowerCase().includes('emergency'))) {
+                    showContact = true;
+                    isFallback = true;
+                }
+                // Also show contact if intent is contact or user message contains contact keywords
+                const contactKeywords = ['contact', 'support', 'help', 'email', 'phone', 'reach'];
+                const userLower = userInput.toLowerCase();
+                if (contactKeywords.some(k => userLower.includes(k))) {
+                    showContact = true;
+                }
+                displayBotMessage(result.response, false, showContact, isFallback);
                 const responseTime = Date.now() - startTime;
-                
-                // تسجيل البيانات التحليلية
                 if (analytics && typeof analytics.logInteraction === 'function') {
                     analytics.logInteraction({
                         userQuery: userInput,
@@ -442,30 +433,19 @@
                         tokensSaved: result.tokensSaved || 0
                     });
                 }
-                
-                // عرض أزرار رد سريع استنادًا إلى الفئة
                 if (result.category) {
                     addQuickReplyButtons(result.category);
                 }
-                
             } catch (error) {
                 console.error("Error processing query:", error);
-                
-                // إخفاء مؤشر الكتابة
                 hideTypingIndicator();
-                
-                // Try to use direct keyword matching as fallback
                 try {
                     console.log('Attempting to use keyword matching fallback');
                     const userLang = navigator.language || navigator.userLanguage;
                     const lang = userLang.startsWith('ar') ? 'ar' : 'en';
-                    
-                    // Get a fallback response based on language
                     let fallbackMessage = lang === 'ar' 
                         ? "عذراً، أواجه مشكلة في الاتصال. إليك بعض المعلومات التي قد تساعدك."
                         : "I apologize for the connection issue. Here's some information that might help.";
-                    
-                    // Try to get a relevant response based on the input keywords
                     if (sandexBot && typeof sandexBot.findKeywordMatch === 'function') {
                         console.log('Using findKeywordMatch for fallback');
                         const result = sandexBot.findKeywordMatch(userInput);
@@ -476,26 +456,20 @@
                             SANDEX_KEYWORDS_DATABASE.greetings && 
                             SANDEX_KEYWORDS_DATABASE.greetings.responses && 
                             SANDEX_KEYWORDS_DATABASE.greetings.responses[lang]) {
-                            // Use the greeting message as fallback
                             console.log('Using greeting as fallback');
                             fallbackMessage = SANDEX_KEYWORDS_DATABASE.greetings.responses[lang];
                         }
                     } else if (typeof SANDEX_KEYWORDS_DATABASE !== 'undefined') {
-                        // Manual keyword matching if method not available
                         console.log('Manual keyword matching as fallback');
                         for (const category in SANDEX_KEYWORDS_DATABASE) {
                             if (SANDEX_KEYWORDS_DATABASE[category] && 
                                 SANDEX_KEYWORDS_DATABASE[category].keywords &&
                                 SANDEX_KEYWORDS_DATABASE[category].responses) {
-                                
                                 const keywords = SANDEX_KEYWORDS_DATABASE[category].keywords;
                                 const lowercaseInput = userInput.toLowerCase();
-                                
-                                // Check if any keyword matches
                                 const hasMatch = keywords.some(keyword => 
                                     lowercaseInput.includes(keyword.toLowerCase())
                                 );
-                                
                                 if (hasMatch && SANDEX_KEYWORDS_DATABASE[category].responses[lang]) {
                                     console.log('Found manual keyword match in category:', category);
                                     fallbackMessage = SANDEX_KEYWORDS_DATABASE[category].responses[lang];
@@ -504,20 +478,138 @@
                             }
                         }
                     }
-                    
-                    displayBotMessage(fallbackMessage);
-                    
+                    // Always show contact in fallback
+                    displayBotMessage(fallbackMessage, false, true, true);
                 } catch (fallbackError) {
-                    // If all else fails, display a generic error message
                     console.error("Fallback error:", fallbackError);
                     const fallbackMsg = "I'm having trouble connecting to the server. Please try again later.";
-                    displayBotMessage(fallbackMsg, true);
+                    displayBotMessage(fallbackMsg, true, true, true);
                 }
             }
         } catch (outerError) {
             console.error('Outer error processing query:', outerError);
             hideTypingIndicator();
-            displayBotMessage("There was a system error. Please refresh the page and try again.", true);
+            displayBotMessage("There was a system error. Please refresh the page and try again.", true, true, true);
+        }
+    }
+
+    // عرض رسالة البوت
+    function displayBotMessage(message, isError = false, showContact = false, showFeedback = true) {
+        try {
+            console.log('Displaying bot message, isError:', isError);
+            const chatMessages = document.getElementById('chatMessages');
+            if (!chatMessages) {
+                console.error('Chat messages container not found');
+                return;
+            }
+            if (!message || message === '') {
+                console.error('Empty message content');
+                message = "Sorry, I couldn't generate a response at this time.";
+                isError = true;
+            }
+            const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const messageElement = document.createElement('div');
+            messageElement.className = `message bot-message ${isError ? 'error-message' : ''}`;
+            const formattedMessage = formatMessage(message);
+            let contactHtml = '';
+            if (showContact) {
+                contactHtml = `
+                    <div class="contact-us-box mt-3">
+                        <a href="#contact" class="contact-link inline-flex items-center px-4 py-2 rounded-full font-bold text-white bg-gradient-to-r from-orange-500 to-yellow-600 hover:from-orange-400 hover:to-yellow-500 transition-all duration-300 shadow-md" style="text-decoration:none;">
+                            <i class="fas fa-envelope mr-2"></i> Contact Us
+                        </a>
+                        <div class="contact-details mt-2 text-xs text-gray-400">
+                            <span><i class="fas fa-phone-alt mr-1"></i> +20 1000066161</span> &nbsp;|&nbsp;
+                            <span><i class="fas fa-at mr-1"></i> mharty@sandexai.com</span>
+                        </div>
+                    </div>
+                `;
+            }
+            let feedbackHtml = '';
+            if (showFeedback) {
+                feedbackHtml = `
+                    <div class="feedback-box mt-3 flex items-center gap-2">
+                        <span class="text-sm text-gray-400 mr-2">Was this helpful?</span>
+                        <button class="feedback-btn thumbs-up" aria-label="Helpful" title="Helpful"><i class="fas fa-thumbs-up"></i></button>
+                        <button class="feedback-btn thumbs-down" aria-label="Not helpful" title="Not helpful"><i class="fas fa-thumbs-down"></i></button>
+                        <span class="feedback-thankyou ml-2 text-green-500 font-bold hidden">Thank you for your feedback!</span>
+                    </div>
+                `;
+            }
+            messageElement.innerHTML = `
+                <div class="message-avatar bot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content bot-content">
+                    <div class="message-text typing-effect">${formattedMessage}</div>
+                    ${contactHtml}
+                    ${feedbackHtml}
+                    <div class="message-time">${timestamp}</div>
+                </div>
+            `;
+            chatMessages.appendChild(messageElement);
+            scrollToBottom();
+            // Typing effect (unchanged)
+            const textElement = messageElement.querySelector('.typing-effect');
+            if (textElement && !isError && formattedMessage.length > 0) {
+                const originalText = textElement.innerHTML;
+                textElement.innerHTML = '';
+                let charIndex = 0;
+                const writeInterval = setInterval(() => {
+                    if (charIndex < originalText.length) {
+                        if (originalText[charIndex] === '<') {
+                            const closeTagIndex = originalText.indexOf('>', charIndex);
+                            if (closeTagIndex !== -1) {
+                                textElement.innerHTML += originalText.substring(charIndex, closeTagIndex + 1);
+                                charIndex = closeTagIndex + 1;
+                            } else {
+                                textElement.innerHTML += originalText[charIndex++];
+                            }
+                        } else {
+                            textElement.innerHTML += originalText[charIndex++];
+                        }
+                        scrollToBottom();
+                    } else {
+                        clearInterval(writeInterval);
+                    }
+                }, 10);
+            }
+            // Feedback event handlers
+            const feedbackBox = messageElement.querySelector('.feedback-box');
+            if (feedbackBox) {
+                const thumbsUp = feedbackBox.querySelector('.thumbs-up');
+                const thumbsDown = feedbackBox.querySelector('.thumbs-down');
+                const thankYou = feedbackBox.querySelector('.feedback-thankyou');
+                const handleFeedback = (isPositive) => {
+                    thumbsUp.disabled = true;
+                    thumbsDown.disabled = true;
+                    if (thankYou) thankYou.classList.remove('hidden');
+                    // Optionally: send feedback to analytics/server here
+                };
+                if (thumbsUp) thumbsUp.addEventListener('click', () => handleFeedback(true));
+                if (thumbsDown) thumbsDown.addEventListener('click', () => handleFeedback(false));
+            }
+        } catch (error) {
+            console.error('Error displaying bot message:', error);
+            try {
+                const chatMessages = document.getElementById('chatMessages');
+                if (chatMessages) {
+                    const div = document.createElement('div');
+                    div.className = 'message bot-message error-message';
+                    div.innerHTML = `
+                        <div class="message-avatar bot-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content bot-content">
+                            <div class="message-text">System error occurred. Please refresh the page.</div>
+                        </div>
+                    `;
+                    chatMessages.appendChild(div);
+                    scrollToBottom();
+                }
+            } catch (e) {
+                console.error('Critical error in fallback message display:', e);
+            }
         }
     }
 
@@ -601,96 +693,6 @@
             scrollToBottom();
         } catch (error) {
             console.error('Error displaying user message:', error);
-        }
-    }
-
-    // عرض رسالة البوت
-    function displayBotMessage(message, isError = false) {
-        try {
-            console.log('Displaying bot message, isError:', isError);
-            const chatMessages = document.getElementById('chatMessages');
-            if (!chatMessages) {
-                console.error('Chat messages container not found');
-                return;
-            }
-            
-            if (!message || message === '') {
-                console.error('Empty message content');
-                message = "Sorry, I couldn't generate a response at this time.";
-                isError = true;
-            }
-            
-            const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            
-            const messageElement = document.createElement('div');
-            messageElement.className = `message bot-message ${isError ? 'error-message' : ''}`;
-            
-            // تحويل نص الرسالة إلى HTML مع دعم التنسيق البسيط
-            const formattedMessage = formatMessage(message);
-            
-            messageElement.innerHTML = `
-                <div class="message-avatar bot-avatar">
-                    <i class="fas fa-robot"></i>
-                </div>
-                <div class="message-content bot-content">
-                    <div class="message-text typing-effect">${formattedMessage}</div>
-                    <div class="message-time">${timestamp}</div>
-                </div>
-            `;
-            
-            chatMessages.appendChild(messageElement);
-            scrollToBottom();
-            
-            // إضافة تأثير الكتابة المتدرج
-            const textElement = messageElement.querySelector('.typing-effect');
-            if (textElement && !isError && formattedMessage.length > 0) {
-                const originalText = textElement.innerHTML;
-                textElement.innerHTML = '';
-                
-                // نشر الحروف تدريجياً لمحاكاة الكتابة
-                let charIndex = 0;
-                const writeInterval = setInterval(() => {
-                    if (charIndex < originalText.length) {
-                        // مراعاة عدم كسر وسوم HTML
-                        if (originalText[charIndex] === '<') {
-                            const closeTagIndex = originalText.indexOf('>', charIndex);
-                            if (closeTagIndex !== -1) {
-                                textElement.innerHTML += originalText.substring(charIndex, closeTagIndex + 1);
-                                charIndex = closeTagIndex + 1;
-                            } else {
-                                textElement.innerHTML += originalText[charIndex++];
-                            }
-                        } else {
-                            textElement.innerHTML += originalText[charIndex++];
-                        }
-                        scrollToBottom();
-                    } else {
-                        clearInterval(writeInterval);
-                    }
-                }, 10);
-            }
-        } catch (error) {
-            console.error('Error displaying bot message:', error);
-            try {
-                // Fallback plain message display without formatting
-                const chatMessages = document.getElementById('chatMessages');
-                if (chatMessages) {
-                    const div = document.createElement('div');
-                    div.className = 'message bot-message error-message';
-                    div.innerHTML = `
-                        <div class="message-avatar bot-avatar">
-                            <i class="fas fa-robot"></i>
-                        </div>
-                        <div class="message-content bot-content">
-                            <div class="message-text">System error occurred. Please refresh the page.</div>
-                        </div>
-                    `;
-                    chatMessages.appendChild(div);
-                    scrollToBottom();
-                }
-            } catch (e) {
-                console.error('Critical error in fallback message display:', e);
-            }
         }
     }
 

@@ -1,0 +1,104 @@
+/* Custom styles for the header */
+.logo-link {
+    line-height: 0 !important;
+}
+
+/* Header styling */
+#main-header {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+    will-change: transform, opacity;
+    --header-height: 72px;
+}
+
+/* Header hide/show states */
+#main-header.header-hidden {
+    transform: translateY(-100%);
+    opacity: 0.8;
+}
+
+#main-header.header-visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Mobile Menu specific styles */
+.mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 45;
+    background-color: rgba(26, 26, 26, 0.95);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    padding: 1rem 0;
+    transform: translateY(-20px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu.visible {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.mobile-menu a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--light);
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.mobile-menu a:hover {
+    background-color: rgba(239, 87, 27, 0.1);
+    color: var(--primary);
+}
+
+.mobile-menu .cyber-button {
+    margin: 1rem;
+    width: calc(100% - 2rem);
+}
+
+/* Navigation toggle button */
+#nav-toggle {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+#nav-toggle:hover {
+    color: var(--secondary);
+}
+
+/* CTA button styling */
+.cta-button {
+    box-shadow: 0 0 15px rgba(255, 109, 0, 0.5);
+}
+
+.cta-button:hover {
+    box-shadow: 0 0 20px rgba(255, 109, 0, 0.7);
+    transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #main-header {
+        --header-height: 64px;
+    }
+    
+    #nav-toggle {
+        display: block;
+    }
+    
+    .nav-links {
+        display: none;
+    }
+}

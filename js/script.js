@@ -1,4 +1,115 @@
-document.addEventListener('DOMContentLoaded', function() {    // Initialize Particles.js
+document.addEventListener('DOMContentLoaded', function() {    
+    // Header Scroll Behavior
+    const handleHeaderScroll = () => {
+        const header = document.getElementById('main-header');
+        const navToggle = document.getElementById('nav-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (!header || !navToggle || !mobileMenu) return;
+        
+        // Initialize header as visible
+        header.classList.add('header-visible');
+        
+        let lastScrollY = window.scrollY;
+        let isHeaderHidden = false;
+        const scrollThreshold = 80;
+
+        // Handle scroll events to hide/show header
+        const onScroll = () => {
+            const currentScrollY = window.scrollY;
+            
+            // Don't hide header if mobile menu is open
+            if (mobileMenu.classList.contains('visible')) return;
+            
+            // Scrolling down & past threshold - hide header
+            if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
+                if (!isHeaderHidden) {
+                    header.classList.remove('header-visible');
+                    header.classList.add('header-hidden');
+                    isHeaderHidden = true;
+                }
+            } 
+            // Scrolling up or at top - show header
+            else {
+                if (isHeaderHidden || currentScrollY < 10) {
+                    header.classList.remove('header-hidden');
+                    header.classList.add('header-visible');
+                    isHeaderHidden = false;
+                }
+            }
+            
+            lastScrollY = currentScrollY;
+        };
+
+        // Mobile Menu Toggle
+        navToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mobileMenu.classList.toggle('visible');
+            
+            // If menu is opened, ensure header is visible
+            if (mobileMenu.classList.contains('visible')) {
+                header.classList.remove('header-hidden');
+                header.classList.add('header-visible');
+                isHeaderHidden = false;
+            }
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (event) => {
+            if (mobileMenu.classList.contains('visible')) {
+                if (!mobileMenu.contains(event.target) && !navToggle.contains(event.target)) {
+                    mobileMenu.classList.remove('visible');
+                }
+            }
+        });
+
+        // Close mobile menu when clicking on a link
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('visible');
+            });
+        });
+
+        // Show header when clicking navigation links
+        const navLinks = document.querySelectorAll('a[href^="#"]');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                header.classList.remove('header-hidden');
+                header.classList.add('header-visible');
+                isHeaderHidden = false;
+                
+                // Smooth scroll to target
+                const targetId = link.getAttribute('href');
+                if (targetId !== '#') {
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80, // Adjust for header height
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Add scroll event listener with throttling for performance
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    onScroll();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+    };
+
+    // Initialize header behavior
+    handleHeaderScroll();
+    
+    // Initialize Particles.js
     if (document.getElementById('particles-js')) {
         particlesJS('particles-js', {            particles: {
                 number: {
@@ -101,13 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {    // Initialize Part
             },
             retina_detect: true
         });
-    }    // Mobile Menu Toggle
-    const mobileMenuButton = document.getElementById('mobileMenuButton');
-    const mobileMenu = document.getElementById('mobileMenu');
-    
-    mobileMenuButton.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-    });
+    }    // Mobile Menu Toggle functionality removed
 
     // تم إزالة جميع الأكواد الخاصة بواجهة الشات من هذا الملف:
     // - Chat Interface Toggle
@@ -197,16 +302,9 @@ document.addEventListener('DOMContentLoaded', function() {    // Initialize Part
     }
 
     // Call this after particles are initialized
-    setTimeout(enhanceParticleInteraction, 1000);
-
-    // Add entrance animations to page elements
+    setTimeout(enhanceParticleInteraction, 1000);    // Add entrance animations to page elements
     function applyEntranceAnimations() {
-        // Header elements
-        const header = document.querySelector('header');
-        if (header) {
-            header.classList.add('fade-in-down');
-        }
-        
+        // Header elements removed
         // Hero section elements
         const heroTitle = document.querySelector('#home h1');
         const heroText = document.querySelector('#home p');
